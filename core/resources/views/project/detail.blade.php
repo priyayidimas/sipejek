@@ -1,17 +1,17 @@
 @php
     $n = 1;$i = 1;
-    $prequestion = App\model\Prequestion::where('project_id','=',$data->id)->get();
-    $group = DB::table('project_x_user')->join('users','project_x_user.user_id','=','users.id')
+    <!-- $prequestion = App\model\Prequestion::where('project_id','=',$data->id)->get(); -->
+    <!-- $group = DB::table('project_x_user')->join('users','project_x_user.user_id','=','users.id')
                                         ->where('project_id','=',$data->id)->where('users.type','=',1)
-                                        ->select('users.fullname','users.email','users.desc','project_x_user.id','project_x_user.user_id')->get();
-    $phase = App\model\Phase::where('project_id','=',$data->id)->get();
+                                        ->select('users.fullname','users.email','users.desc','project_x_user.id','project_x_user.user_id')->get(); -->
+    <!-- $phase = App\model\Phase::where('project_id','=',$data->id)->get(); -->
 @endphp
 @extends('t_index')
 @section('title')
     Project View
 @endsection
 @section('content')
-<div class="container">    
+<div class="container">
     <div class="row mb-4">
         <div class="col">
             <div class="card">
@@ -130,7 +130,7 @@
                         @php
                             $n = 1;
                             $activity = App\model\Activity::where('phase_id','=',$ph->id)->get();
-                        @endphp                            
+                        @endphp
                         <div class="card">
                             <div class="card-header" role="tab" id="heading{{$ph->id}}">
                                 <h5 class="mb-0"><a data-toggle="collapse" href="#collapse{{$ph->id}}" aria-expanded="true" aria-controls="collapse{{$ph->id}}">{{$ph->title}}<i class="fas fa-angle-down rotate-icon"></i></a></h5>
@@ -215,7 +215,7 @@
                 </div>
 
                 <div class="modal-body">
-                    
+
                 </div>
             </div>
         </div>
@@ -232,7 +232,7 @@
                 </div>
 
                 <div class="modal-body">
-                    
+
                 </div>
             </div>
         </div>
@@ -249,7 +249,7 @@
                 </div>
 
                 <div class="modal-body">
-                    
+
                 </div>
             </div>
         </div>
@@ -266,7 +266,7 @@
                 </div>
 
                 <div class="modal-body">
-                    
+
                 </div>
             </div>
         </div>

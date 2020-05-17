@@ -12,7 +12,7 @@
     <link href="{{url('/assets/css/style.css')}}" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">    
+    <div class="container mt-5">
         <div class="row">
             <div class="col-lg-3"></div>
             <div class="col">
@@ -23,30 +23,30 @@
                             <div class="form-header default-color">
                                 <h3><i class="fas fa-user"></i> Register:</h3>
                             </div>
-                            <div class="md-form">
+                            <!-- <div class="md-form">
                                 <i class="fas fa-id-card prefix grey-text"></i>
                                 <input type="text" id="defaultForm-email" class="form-control" name="nim" value="{{old('nim')}}">
                                 <label for="defaultForm-email">nim</label>
-                            </div>
+                            </div> -->
                             <div class="md-form">
                                 <i class="fas fa-id-badge prefix grey-text"></i>
                                 <input type="text" id="defaultForm-email" class="form-control" name="nama" value="{{old('nama')}}">
-                                <label for="defaultForm-email">full name</label>
+                                <label for="defaultForm-email">Full name</label>
                             </div>
                             <div class="md-form">
                                 <i class="fas fa-envelope prefix grey-text"></i>
                                 <input type="text" id="defaultForm-email" class="form-control" name="email" value="{{old('email')}}">
-                                <label for="defaultForm-email">email</label>
+                                <label for="defaultForm-email">Email</label>
                             </div>
                             <div class="md-form">
                                 <i class="fas fa-lock prefix grey-text"></i>
                                 <input type="password" id="defaultForm-pass" class="form-control" name="password">
-                                <label for="defaultForm-pass">password</label>
+                                <label for="defaultForm-pass">Password</label>
                             </div>
                             <div class="md-form">
                                 <i class="fas fa-lock prefix grey-text"></i>
                                 <input type="password" id="defaultForm-pass" class="form-control" name="cpassword">
-                                <label for="defaultForm-pass">confirm password</label>
+                                <label for="defaultForm-pass">Confirm password</label>
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-default" type="submit">Register</button>
