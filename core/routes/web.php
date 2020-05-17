@@ -31,12 +31,13 @@ Route::get('logout', 'UserController@logout');
 Route::post('newPassword', 'UserController@newPassword');
 Route::post('updateProfile', 'UserController@updateProfile');
 
-Route::get('dashboard', function () {
-    if (!Auth::check()) {
-        return redirect('/');
-    }
-    return view("dashboard");
-});
+Route::get('dashboard', 'UserController@dashboard');
+// Route::get('dashboard', function () {
+//     if (!Auth::check()) {
+//         return redirect('/');
+//     }
+//     return view("dashboard");
+// });
 Route::get('myProfile', function () {
     if (!Auth::check()) {
         return redirect('/');
