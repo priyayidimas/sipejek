@@ -17,18 +17,17 @@ class UserController extends Controller
             return back()->with(['color' => 'error', 'msg' => 'Login Gagal'])->withInput();
        }
     }
-    
+
     public function register(Request $request)
     {
        if ($request->password != $request->cpassword) {
           return back()->with(['color' => 'error', 'msg' => 'Password dan Confirm Password Tidak Sesuai'])->withInput();
        }
 
-       if (User::where('email','=',$request->email)->count() > 0 || User::where('nim','=',$request->nim)->count() > 0) {
+       if (User::where('email','=',$request->email)->count() > 0) {
           return back()->with(['color' => 'error', 'msg' => 'User Sudah Ada Bung!'])->withInput();
        }else{
           $user = new User();
-          $user->nim = $request->nim;
           $user->nama = $request->nama;
           $user->email = $request->email;
           $user->tipe = 0;
@@ -55,6 +54,14 @@ class UserController extends Controller
        }
     }
 
+    public function dashboard(){
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $auth = Auth::user();
+        return view("dashboard", compact('auth'));
+    }
+
     public function file(Request $req)
     {
        echo $req->check;
@@ -74,10 +81,10 @@ class UserController extends Controller
       echo $cek;
       if($cek == 0){
          $user = new User();
-         $user->fullname = $req->fullname;
+         $user->nama = $req->nama;
          $user->email = $req->email;
          $user->password = bcrypt($req->password);
-         $user->type = $req->type;
+         $user->tipe = $req->tipe;
          if ($req->has('desc')) {
             $user->desc = $req->desc;
          }
@@ -93,7 +100,7 @@ class UserController extends Controller
     {
       $id = decrypt($req->token);
       $user = User::find($id);
-      $user->fullname = $req->fullname;
+      $user->nama = $req->nama;
       $user->email = $req->email;
       if ($req->has('desc')) {
          $user->desc = $req->desc;
@@ -114,7 +121,7 @@ class UserController extends Controller
        $id = decrypt($req->token);
        $user = User::find($id);
        $user->email = $req->email;
-       $user->fullname = $req->fullname;
+       $user->nama = $req->nama;
        if($req->nPassword != ""){
           $user->password = bcrypt($req->nPassword);
        }
@@ -150,12 +157,38 @@ class UserController extends Controller
    //     $code = rand(0,1000);
    //     $file = Input::file('foto');
    //     $name = $file->getClientOriginalName();
-       
+
    //     $dest = "upload";
    //     $filename = $code." - ".$name;
    //     $file->move($dest,$filename);
    //     $pemilik['foto'] = $filename;
    //   }
    //   DB::table('pemilik')->insert($pemilik);
+    }
+
+    public function index() {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $data = User::get();
+        return view("user.view",["data" => $data]);
+    }
+
+    public function editbyid($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = User::find($did);
+        return view("user.edit",["data" => $data, "eid" => $id]);
+    }
+
+    public function deletebyid($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = User::find($did);
+        return view("user.delete",["data" => $data, "eid" => $id]);
     }
 }

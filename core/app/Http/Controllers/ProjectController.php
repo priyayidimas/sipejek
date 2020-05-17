@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\model\Project;
 use App\model\Phase;
 use App\model\ProjectUser;
@@ -130,5 +131,86 @@ class ProjectController extends Controller
         }
         $project->save();
         return redirect('/projects/detail/'.$req->token)->with(['msg' => 'Project and User Link Deleted!','color' => 'success']);
+    }
+
+    public function index() {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $data = Project::get();
+        return view("project.view",["data" => $data]);
+    }
+
+    public function editbyid($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Project::find($did);
+        return view("project.edit",["data" => $data, "eid" => $id]);
+    }
+
+    public function deletebyid($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Project::find($did);
+        return view("project.delete",["data" => $data, "eid" => $id]);
+    }
+
+    public function detail($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Project::find($did);
+        return view("project.detail",["data" => $data, "eid" => $id]);
+    }
+
+    public function addprojectbyid($project_id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        return view("project.user_add",["project_id" => $project_id]);
+    }
+    public function deleteprojectbyid($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = ProjectUser::find($did);
+        return view("project.user_delete",["data" => $data, "eid" => $id]);
+    }
+
+    public function addphasebyid($project_id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        return view("phase.add",["project_id" => $project_id]);
+    }
+    public function editphasebyid($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Phase::find($did);
+        return view("phase.edit",["data" => $data, "eid" => $id]);
+    }
+    public function deletephasebyid($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Phase::find($did);
+        return view("phase.delete",["data" => $data, "eid" => $id]);
+    }
+    public function detailphase($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Phase::find($did);
+        return view("phase.detail",["data" => $data, "eid" => $id]);
     }
 }

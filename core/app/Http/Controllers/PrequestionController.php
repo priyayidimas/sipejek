@@ -62,4 +62,40 @@ class PrequestionController extends Controller
       $prequestionU->delete();
       return redirect('/prequestions/')->with(['msg' => 'Preliminary Answer Deleted!','color' => 'success']);
     }
+    public function add($project_id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        return view("prequestion.add",["project_id" => $project_id]);
+    }
+    public function edit($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Prequestion::find($did);
+        return view("prequestion.edit",["data" => $data, "eid" => $id]);
+    }
+    public function delete($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Prequestion::find($did);
+        return view("prequestion.delete",["data" => $data, "eid" => $id]);
+    }
+    public function detail($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Prequestion::find($did);
+        return view("prequestion.detail",["data" => $data, "eid" => $id]);
+    }
+    public function closeforum($project_id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        return view("prequestion.closeforum",["project_id" => $project_id]);
+    }
 }
