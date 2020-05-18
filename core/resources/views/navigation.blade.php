@@ -71,7 +71,6 @@
 
         </ul>
       </li>
-      <!--/. Side navigation links -->
     </ul>
     <div class="sidenav-bg mask-strong"></div>
   </div>

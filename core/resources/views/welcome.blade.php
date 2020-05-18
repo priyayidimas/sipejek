@@ -20,13 +20,6 @@
                     <img src="{{url('/assets/img/Capture.png')}}" width="150" height="150" class="mb-2 img-fluid rounded-circle z-depth-1-half" alt="">
                     <h4 class="display">Sistem Pengelola Projek</h4>
                 </div>
-                {{-- @if (session('msg'))
-                    <div class="card mb-5">
-                        <div class="card-body {{session('color')}}">
-                            <p class="card-text text-white">{{session('msg')}}</p>
-                        </div>
-                    </div>
-                @endif --}}
                 <form action="{{url('login')}}" method="post">
                     @csrf
                     <div class="card">

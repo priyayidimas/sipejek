@@ -1,5 +1,5 @@
 @php
-    <!-- $answer = App\model\PrequestionUser::where('prequestion_id','=',$data->id)->get(); -->
+    $answer = App\model\PrequestionUser::where('prequestion_id','=',$data->id)->get();
     $n = 1;
 @endphp
 <p>Question : {{$data->question}}</p>

@@ -29,9 +29,7 @@
                                     <div class="card-body">
                                         <h4>{{$data->fullname}}</h4>
                                         <p>{{$data->email}}</p>
-                                        <!--Triggering button-->
-                                        <a class="rotate-btn" data-card="card-2">
-                                            <i class="fas fa-redo-alt"></i> Click here to rotate</a>
+                                        <a class="rotate-btn" data-card="card-2"><i class="fas fa-redo-alt"></i> Click here to rotate</a>
                                     </div>
                                 </div>
                                 <div class="card face back">
@@ -71,7 +69,6 @@
                                                 <div class="col">
                                                 </div>
                                             </div>
-
                                         </div>
                                         <hr>
                                         <button type="submit" class="btn btn-success btn-md">Submit</button>

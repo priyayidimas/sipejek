@@ -11,6 +11,7 @@ use App\model\User;
 
 class ProjectController extends Controller
 {
+    //Project
     public function insertProject(Request $req)
     {
         $cek = Project::where('code','=',$req->code)->count();
@@ -51,6 +52,7 @@ class ProjectController extends Controller
       $project->delete();
       return redirect('/projects/')->with(['msg' => 'Project Deleted!','color' => 'success']);
     }
+    //Phase
     public function insertPhase(Request $req)
     {
         $phase = new Phase();
@@ -84,6 +86,7 @@ class ProjectController extends Controller
       $phase->delete();
       return redirect('/phases/')->with(['msg' => 'Phase Deleted!','color' => 'success']);
     }
+    //String
     public function randomString($length = 6)
     {
         $char = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
@@ -93,6 +96,7 @@ class ProjectController extends Controller
         }
         return $rand;
     }
+    //ProjectUSer
     public function insertProjectUser(Request $req)
     {
         $groups = $req->groups;

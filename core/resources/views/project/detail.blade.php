@@ -1,10 +1,10 @@
 @php
     $n = 1;$i = 1;
-    <!-- $prequestion = App\model\Prequestion::where('project_id','=',$data->id)->get(); -->
-    <!-- $group = DB::table('project_x_user')->join('users','project_x_user.user_id','=','users.id')
+    $prequestion = App\model\Prequestion::where('project_id','=',$data->id)->get();
+    $group = DB::table('project_x_user')->join('users','project_x_user.user_id','=','users.id')
                                         ->where('project_id','=',$data->id)->where('users.type','=',1)
-                                        ->select('users.fullname','users.email','users.desc','project_x_user.id','project_x_user.user_id')->get(); -->
-    <!-- $phase = App\model\Phase::where('project_id','=',$data->id)->get(); -->
+                                        ->select('users.fullname','users.email','users.desc','project_x_user.id','project_x_user.user_id')->get();
+    $phase = App\model\Phase::where('project_id','=',$data->id)->get();
 @endphp
 @extends('t_index')
 @section('title')

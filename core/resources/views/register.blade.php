@@ -23,11 +23,6 @@
                             <div class="form-header default-color">
                                 <h3><i class="fas fa-user"></i> Register:</h3>
                             </div>
-                            <!-- <div class="md-form">
-                                <i class="fas fa-id-card prefix grey-text"></i>
-                                <input type="text" id="defaultForm-email" class="form-control" name="nim" value="{{old('nim')}}">
-                                <label for="defaultForm-email">nim</label>
-                            </div> -->
                             <div class="md-form">
                                 <i class="fas fa-id-badge prefix grey-text"></i>
                                 <input type="text" id="defaultForm-email" class="form-control" name="nama" value="{{old('nama')}}">

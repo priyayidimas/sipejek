@@ -1,3 +1,6 @@
+@php
+    $auth = Auth::user();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,39 +10,18 @@
     <title>SIPEJEK &middot; @yield('title')</title>
     <link rel="shortcut icon" href="{{{ asset('/assets/img/Capture.png') }}}">
     <link href="{{url('/assets/fontawesome/css/all.css')}}" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="{{url('/assets/css/all.css')}}"> --}}
     <link href="{{url('/assets/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url('/assets/css/mdb.min.css')}}" rel="stylesheet">
-    {{-- <link href="{{url('/assets/css/style.css')}}" rel="stylesheet"> --}}
-    <style>
-        .navbar {
-            z-index: 1040;
-        }
-        .side-nav {
-            margin-top: 49px !important;
-        }
-        .double-nav .breadcrumb-dn p {
-            color: #fff;
-        }
-        html, body{
-          background: #f0f0f0;
-        }
-    </style>
+    <link href="{{url('/assets/css/style.css')}}" rel="stylesheet">
     @yield('head')
 </head>
 <body class="hidden-sn black-skin">
-        @php
-        $auth = Auth::user();
-        @endphp
-        @include('navigation')
-        <main>
-          <div class="container-fluid">
+    @include('navigation')
+    <main>
+        <div class="container-fluid">
             @yield('content')
-            {{-- <div style="height: 2000px"></div> --}}
-          </div>
-        </main>
-        <!--Main Layout-->
-
+        </div>
+    </main>
 </body>
 <script type="text/javascript" src="{{url('/assets/js/jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{url('/assets/js/popper.min.js')}}"></script>
