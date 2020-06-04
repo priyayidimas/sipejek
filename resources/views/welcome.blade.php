@@ -69,6 +69,11 @@
         @if(session('msg'))
             toastr["{{session('color')}}"]("{{session('msg')}}");
         @endif
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr["danger"]("{{ $error }}");
+            @endforeach
+        @endif
     });
 </script>
 </html>

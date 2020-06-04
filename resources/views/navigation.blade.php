@@ -3,18 +3,18 @@
     <ul class="custom-scrollbar">
       {{-- Logo --}}
       <li>
-        <div class="logo-wrapper waves-light" style="height:232px">
-          <a href="#"><img src="{{url('/upload/profile/'.$auth->image)}}" class="rounded-circle img-fluid flex-center"></a>
+        {{-- <div class="logo-wrapper waves-light" style="height:232px"> --}}
+        <div class="logo-wrapper waves-light" style="height:175px">
+          <a href="#"><img src="{{url($auth->image)}}" class="rounded-circle img-fluid flex-center"></a>
         </div>
       </li>
       {{-- Accordion --}}
       <li>
         <ul class="collapsible collapsible-accordion">
           <li><a class="collapsible-header waves-effect" href="{{url('dashboard')}}"><i class="fas fa-desktop"></i> Dashboard </a></li>
-          <li><a class="collapsible-header waves-effect" href="{{url('users')}}"><i class="fas fa-user "></i> Users </a></li>
           <li><a class="collapsible-header waves-effect" href="{{url('projects')}}"><i class="fas fa-code"></i> Projects </a></li>
-          <li><a class="collapsible-header waves-effect" href="{{url('messages')}}"><i class="fas fa-envelope"></i> Message </a></li>
-          <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-chevron-right"></i> Menu <i class="fas fa-angle-down rotate-icon"></i></a>
+          <li><a class="collapsible-header waves-effect" href="{{url('users')}}"><i class="fas fa-user "></i> Users </a></li>
+          {{-- <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-chevron-right"></i> Menu <i class="fas fa-angle-down rotate-icon"></i></a>
             <div class="collapsible-body">
               <ul>
                 <li><a href="#" class="waves-effect">Submit listing</a>
@@ -23,51 +23,7 @@
                 </li>
               </ul>
             </div>
-          </li>
-          <li><a class="collapsible-header waves-effect arrow-r"><i class="far fa-hand-pointer"></i>
-              Another Menu<i class="fas fa-angle-down rotate-icon"></i></a>
-            <div class="collapsible-body">
-              <ul>
-                <li><a href="#" class="waves-effect">For bloggers</a>
-                </li>
-                <li><a href="#" class="waves-effect">For authors</a>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li><a class="collapsible-header waves-effect arrow-r"><i class="far fa-eye"></i> Other Menu<i class="fas fa-angle-down rotate-icon"></i></a>
-            <div class="collapsible-body">
-              <ul>
-                <li><a href="#" class="waves-effect">Introduction</a>
-                </li>
-                <li><a href="#" class="waves-effect">Monthly meetings</a>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li><a class="collapsible-header waves-effect arrow-r"><i class="far fa-envelope"></i> Long Menu<i
-                class="fas fa-angle-down rotate-icon"></i></a>
-            <div class="collapsible-body">
-              <ul>
-                <li><a href="#" class="waves-effect">FAQ</a>
-                </li>
-                <li><a href="#" class="waves-effect">Write a message</a>
-                </li>
-                <li><a href="#" class="waves-effect">FAQ</a>
-                </li>
-                <li><a href="#" class="waves-effect">Write a message</a>
-                </li>
-                <li><a href="#" class="waves-effect">FAQ</a>
-                </li>
-                <li><a href="#" class="waves-effect">Write a message</a>
-                </li>
-                <li><a href="#" class="waves-effect">FAQ</a>
-                </li>
-                <li><a href="#" class="waves-effect">Write a message</a>
-                </li>
-              </ul>
-            </div>
-          </li>
+          </li> --}}
 
         </ul>
       </li>
@@ -81,14 +37,19 @@
     </div>
 
     <div class="breadcrumb-dn mr-auto">
-      <p>Sistem Pengelola Projek</p>
+      <p><a href="{{url('')}}">Sistem Pengelola Projek</a></p>
     </div>
 
     <ul class="nav navbar-nav nav-flex-icons ml-auto">
       <li class="nav-item">
-        <a class="nav-link"><i class="fa fa-bell"></i> <span class="clearfix d-none d-sm-inline-block">Notification</span></a>
+        <a class="nav-link waves-effect waves-light" data-toggle="modal" href="#notificationModal">
+          @if ($auth->unreadNotifications->count() > 0)
+            <span class="notifCount badge badge-danger ml-2">{{$auth->unreadNotifications->count()}}</span>
+          @endif
+          <i class="fas fa-bell"></i>
+        </a>
       </li>
-      <li class="nav-item dropdown">
+      <li class="nav-item">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-user"></i> <span class="clearfix d-none d-sm-inline-block">{{$auth->nama}}</span>

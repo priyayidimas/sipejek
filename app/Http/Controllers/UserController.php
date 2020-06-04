@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\model\User;
+use App\model\Project;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+   //GET
    public function index()
    {
       if(!Auth::check()){
@@ -16,6 +19,62 @@ class UserController extends Controller
       }else{
          return redirect('/dashboard');
       }
+   }
+   public function v_register()
+   {
+      return view('register');
+   }
+   public function dashboard(){
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $auth = User::find(Auth::id());
+      return view("dashboard", compact('auth'));
+   }
+   public function logout()
+   {
+      Auth::logout();
+      return redirect('/')->with(['msg' => 'Berhasil Keluar','color' => 'success']);
+   }
+   public function view() {
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $data = User::get();
+      return view("user.view",["data" => $data]);
+   }
+   public function editbyid($id,$project_id = null) {
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $did = decrypt($id);
+      $data = User::find($did);
+      return view("user.edit",["data" => $data, "eid" => $id, "project_id" => $project_id]);
+   }
+   public function deletebyid($id,$project_id = null) {
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $did = decrypt($id);
+      $data = User::find($did);
+      return view("user.delete",["data" => $data, "eid" => $id, "project_id" => $project_id]);
+   }
+   public function myProfile()
+   {
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $auth = User::find(Auth::id());
+      return view("user.profile",["data" => $auth]);
+   }
+   public function showNotification()
+   {
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $auth = User::find(Auth::id());
+      $auth->unreadNotifications->markAsRead();
+      return view("user.notification",["auth" => $auth]);
    }
 
    public function login(Request $request)
@@ -26,14 +85,13 @@ class UserController extends Controller
          return back()->with(['color' => 'error', 'msg' => 'Login Gagal'])->withInput();
       }
    }
-
-   public function v_register()
-   {
-      return view('register');
-   }
-
    public function register(Request $request)
    {
+      $request->validate([
+         'email' => 'required|email|max:30',
+         'password' => 'required|min:8',
+         'fullname' => 'required|max:50',
+      ]);
       if ($request->password != $request->cpassword) {
          return back()->with(['color' => 'error', 'msg' => 'Password dan Confirm Password Tidak Sesuai'])->withInput();
       }
@@ -42,9 +100,9 @@ class UserController extends Controller
          return back()->with(['color' => 'error', 'msg' => 'User Sudah Ada Bung!'])->withInput();
       }else{
          $user = new User();
-         $user->nama = $request->nama;
+         $user->fullname = $request->fullname;
          $user->email = $request->email;
-         $user->tipe = 0;
+         $user->type = 0;
          $user->password = bcrypt($request->password);
          $user->save();
 
@@ -52,7 +110,6 @@ class UserController extends Controller
 
       }
    }
-
    public function newPassword(Request $request)
    {
       $user = User::find($request->id);
@@ -68,97 +125,77 @@ class UserController extends Controller
       }
    }
 
-   public function dashboard(){
-      if (!Auth::check()) {
-         return redirect('/');
-      }
-      $auth = Auth::user();
-      return view("dashboard", compact('auth'));
-   }
-
-   public function logout()
-   {
-      Auth::logout();
-      return redirect('/')->with(['msg' => 'Berhasil Keluar','color' => 'success']);
-   }
-
-   public function view() {
-      if (!Auth::check()) {
-         return redirect('/');
-      }
-      $data = User::get();
-      return view("user.view",["data" => $data]);
-   }
-
-   public function editbyid($id) {
-      if (!Auth::check()) {
-         return redirect('/');
-      }
-      $did = decrypt($id);
-      $data = User::find($did);
-      return view("user.edit",["data" => $data, "eid" => $id]);
-   }
-
-   public function deletebyid($id) {
-      if (!Auth::check()) {
-         return redirect('/');
-      }
-      $did = decrypt($id);
-      $data = User::find($did);
-      return view("user.delete",["data" => $data, "eid" => $id]);
-   }
-
    public function insertUser(Request $req)
    {
+      $req->validate([
+         'email' => 'required|email|max:30',
+         'password' => 'required|min:8',
+         'fullname' => 'required|max:50',
+      ]);
+
       $cek = User::where('email','=',$req->email)->count();
       echo $cek;
       if($cek == 0){
          $user = new User();
-         $user->nama = $req->nama;
+         $user->fullname = $req->fullname;
          $user->email = $req->email;
          $user->password = bcrypt($req->password);
-         $user->tipe = $req->tipe;
+         $user->type = $req->type;
          if ($req->has('desc')) {
-            $user->desc = $req->desc;
+            $user->desc = nl2br($req->desc);
          }
          $user->save();
          // echo "Here";
          return redirect('/users/')->with(['msg' => 'User Added!','color' => 'success']);
       }else{
          // echo "Nowhere";
-         return redirect('/users/')->with(['msg' => 'Duplicate User','color' => 'danger']);
+         return redirect('/users/')->with(['msg' => 'Duplicate User','color' => 'error']);
       }
    }
    public function updateUser(Request $req)
    {
+      $req->validate([
+         'email' => 'required|email|max:30',
+         'fullname' => 'required|max:50',
+         'desc' => 'nullable|max:255'
+      ]);
+
       $id = decrypt($req->token);
       $user = User::find($id);
-      $user->nama = $req->nama;
+      $user->fullname = $req->fullname;
       $user->email = $req->email;
       if ($req->has('desc')) {
-         $user->desc = $req->desc;
+         $user->desc = nl2br($req->desc);
       }
       $user->save();
-      return redirect('/users/')->with(['msg' => 'User Updated!','color' => 'success']);
+      
+      if($req->project == ''){
+         return redirect('/users/')->with(['msg' => 'User Updated!','color' => 'success']);
+      }else{
+         $data = Project::find(decrypt($req->project));
+         return redirect('/projects/detail/'.$data->code)->with(['msg' => 'User Updated!','color' => 'success']);
+      }
    }
    public function deleteUser(Request $req)
    {
       $id = decrypt($req->token);
       $user = User::find($id);
       $user->delete();
-      return redirect('/users/')->with(['msg' => 'User Deleted!','color' => 'success']);
-   }
-
-   public function myProfile()
-   {
-      if (!Auth::check()) {
-         return redirect('/');
+      if($req->project == ''){
+         return redirect('/users/')->with(['msg' => 'User Deleted!','color' => 'success']);
+      }else{
+         return redirect('/projects/detail/'.$req->project)->with(['msg' => 'User Deleted!','color' => 'success']);
       }
-      return view("user.profile",["data" => Auth::user()]);
    }
 
    public function updateProfile(Request $req)
    {
+      $req->validate([
+         'email' => 'required|email|max:30',
+         'fullname' => 'required|max:50',
+         'nPassword' => 'nullable|max:50',
+      ]);
+
       $id = decrypt($req->token);
       $user = User::find($id);
       $user->email = $req->email;
@@ -179,27 +216,24 @@ class UserController extends Controller
       $user->save();
       return redirect('/dashboard/')->with(['msg' => 'Profile Updated!','color' => 'success']);
    }
-
    public function file(Request $req)
    {
-      echo $req->check;
-      // $path = $req->file('avatar')->store('public');
+      // echo $req->check;
+      // $code = rand(0,1000);
+      // $a = "BIO100";
+      // $path = $req->file('avatar')->storeAs(
+      //    $a.'/Assignment/Assignment_Apa',
+      //    $code.'_'.$req->file('avatar')->getClientOriginalName(),
+      //    'project'
+      // );
+      foreach ($req->question as $question) {
+         echo $question."<br>";
+      }
       // return redirect('/file')->with(['msg' => 'Berhasil Upload','color' => 'success']);
    }
 
    public function geDebug()
    {
-      //    $pemilik = array(
-      //       'nama' => Input::get('pemilik_nama'),
-      //       'ttl' => Input::get('tmpt_lahir').", ".Input::get('tgl_lahir'),
-      //       'alamat' => Input::get('pemilik_alamat'),
-      //       'nik' => Input::get('nik'),
-      //       'jk' => Input::get('jk'),
-      //       'kontak' => Input::get('kontak'),
-      //       'ahli_waris' => Input::get('ahli_waris'),
-      //       'pekerjaan' => Input::get('pekerjaan'),
-      //       'pAhli_waris' => Input::get('pAhli_waris')
-      //   );
       //   if (Input::hasFile('foto')) {
       //     $code = rand(0,1000);
       //     $file = Input::file('foto');

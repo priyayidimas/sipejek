@@ -10,3 +10,9 @@
 html, body{
   background: #f0f0f0;
 }
+
+/* Toast */
+.md-toast-close-button:hover,
+.md-toast-close-button:focus {
+  color: #000 !important; }
+

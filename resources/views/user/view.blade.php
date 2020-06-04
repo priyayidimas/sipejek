@@ -33,7 +33,7 @@
                                 <td>{{$n++}}</td>
                                 <td>{{$d->nama}}</td>
                                 <td>{{$d->email}}</td>
-                                <td>{{$d->tipe}}</td>
+                                <td>{{$d->type}}</td>
                                 <td style="white-space:pre">{{$d->desc}}</td>
                                 <td><a href="#theModal" class="text-warning" data-toggle="modal" data-action="edit" data-token="{{encrypt($d->id)}}"><i class="fas fa-pencil"></i></a>&nbsp;&nbsp;&nbsp;<a href="#theModal" class="text-danger" data-toggle="modal" data-action="delete" data-token="{{encrypt($d->id)}}"><i class="fas fa-trash"></i></a></td>
                             </tr>

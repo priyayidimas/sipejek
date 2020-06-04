@@ -16,6 +16,28 @@ SIPEJEK VER 0.0.10
 	- Simpler CRUD with Modals
 	- Back-end Focused, Needs to reform the design
 
+
+
+
+- To-Do:
+	- Fixing Relationship Model					V
+	- File Manager Access						V
+	- File Manager Usability (New Folder)		V
+	- Notification Feature						V
+	- Form Validation							V
+
+	- Assignment Feature						V
+	- Comment Feature							V			
+	- Quiz										V
+
+	- Dashboard									(Front-End Please)
+	- Siswa 									(Front-End Please)
+		- Dashboard
+		- Turning In Assignment
+		- Answer Quiz
+	- Grading System (On Assignment and Quiz)	(Front-End Please)
+	- Landing Page								(Front-End Please)
+	- Debugging									(HELP)
 - Upcoming
 	- Quiz Design
 	- Timer System
