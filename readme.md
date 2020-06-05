@@ -37,7 +37,11 @@ SIPEJEK VER 0.0.10
 		- Answer Quiz
 	- Grading System (On Assignment and Quiz)	(Front-End Please)
 	- Landing Page								(Front-End Please)
-	- Debugging									(HELP)
+	- Debugging									(HELP) (Note: Please remove if Anom already read it)
+		- Change '$req->token' to '$prequestion->project->code' at PrequestionController@insertPrequestion
+		- Change 'encrypt($prequestion->project_id)' to '$prequestion->project->code' at PrequestionController@updatePrequestion
+		- Adding back button in localhost:8000/activity/detail
+		- Fix problem about attachment link
 - Upcoming
 	- Quiz Design
 	- Timer System
