@@ -17,7 +17,7 @@
         <tr>
             <td>{{$n++}}</td>
             <td>{{$p->user->fullname}}</td>
-            <td style="white-space:pre">{{$p->answer}}</td>
+            <td style="white-space:pre">{!! $p->answer !!}</td>
         </tr>
         @endforeach
     </tbody>

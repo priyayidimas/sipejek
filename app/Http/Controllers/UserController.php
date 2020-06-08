@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\model\User;
 use App\model\Project;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -34,14 +35,32 @@ class UserController extends Controller
    public function logout()
    {
       Auth::logout();
-      return redirect('/')->with(['msg' => 'Berhasil Keluar','color' => 'success']);
+      return redirect('/')->with(['msg' => 'Logged Out!','color' => 'success']);
    }
    public function view() {
       if (!Auth::check()) {
          return redirect('/');
       }
-      $data = User::get();
+      $data = User::where('type','=',2)->orderBy('created_at','desc')->get();
       return view("user.view",["data" => $data]);
+   }
+   public function verify($id) {
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $did = decrypt($id);
+      $data = User::find($did);
+      $data->verified = 1;
+      $data->save();
+      return redirect('/users')->with(['msg' => 'User Verified','color' => 'success']);
+   }
+   public function detail($id,$project_id = null) {
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $did = decrypt($id);
+      $data = User::find($did);
+      return view("user.detail",["data" => $data, "eid" => $id, "project_id" => $project_id]);
    }
    public function editbyid($id,$project_id = null) {
       if (!Auth::check()) {
@@ -65,7 +84,7 @@ class UserController extends Controller
          return redirect('/');
       }
       $auth = User::find(Auth::id());
-      return view("user.profile",["data" => $auth]);
+      return view("user.profile",["auth" => $auth]);
    }
    public function showNotification()
    {
@@ -80,7 +99,12 @@ class UserController extends Controller
    public function login(Request $request)
    {
       if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-         return redirect('/dashboard')->with(['color' => 'success', 'msg' => 'Login Berhasil']);
+         if(Auth::user()->verified == 1){
+            return redirect('/dashboard')->with(['color' => 'success', 'msg' => 'Login Berhasil']);
+         }else{
+            Auth::logout();
+            return redirect('/')->with(['color' => 'error', 'msg' => 'Not Verified Yet']);
+         }
       }else{
          return back()->with(['color' => 'error', 'msg' => 'Login Gagal'])->withInput();
       }
@@ -93,16 +117,17 @@ class UserController extends Controller
          'fullname' => 'required|max:50',
       ]);
       if ($request->password != $request->cpassword) {
-         return back()->with(['color' => 'error', 'msg' => 'Password dan Confirm Password Tidak Sesuai'])->withInput();
+         return back()->with(['color' => 'error', 'msg' => 'Password dan Confirm Password Not Matched'])->withInput();
       }
 
       if (User::where('email','=',$request->email)->count() > 0) {
-         return back()->with(['color' => 'error', 'msg' => 'User Sudah Ada Bung!'])->withInput();
+         return back()->with(['color' => 'error', 'msg' => 'User Exists!'])->withInput();
       }else{
          $user = new User();
          $user->fullname = $request->fullname;
          $user->email = $request->email;
-         $user->type = 0;
+         $user->type = 2;
+         $user->verified = 0;
          $user->password = bcrypt($request->password);
          $user->save();
 
@@ -142,7 +167,8 @@ class UserController extends Controller
          $user->password = bcrypt($req->password);
          $user->type = $req->type;
          if ($req->has('desc')) {
-            $user->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $user->desc = nl2br($escape);
          }
          $user->save();
          // echo "Here";
@@ -165,7 +191,8 @@ class UserController extends Controller
       $user->fullname = $req->fullname;
       $user->email = $req->email;
       if ($req->has('desc')) {
-         $user->desc = nl2br($req->desc);
+         $escape = htmlspecialchars($req->desc);
+         $user->desc = nl2br($escape);
       }
       $user->save();
       
@@ -193,28 +220,41 @@ class UserController extends Controller
       $req->validate([
          'email' => 'required|email|max:30',
          'fullname' => 'required|max:50',
-         'nPassword' => 'nullable|max:50',
+         'password' => 'nullable|max:50',
       ]);
+
+
 
       $id = decrypt($req->token);
       $user = User::find($id);
+      if($user->email != $req->email && (User::where('email','=',$req->email)->count() > 0)){
+         return back()->with(['msg' => 'Email Exists!','color' => 'error']);
+      }
       $user->email = $req->email;
       $user->fullname = $req->fullname;
-      if($req->nPassword != ""){
-         $user->password = bcrypt($req->nPassword);
+      if($req->password != ""){
+         $user->password = bcrypt($req->password);
       }
-      if($req->has('image')){
+      if ($req->has('image')) {
          $code = rand(0,1000);
-         $file = $req->image;
-         $name = $file->getClientOriginalName();
-         $tName = str_replace(" ","_",$name);
-         $dest = "upload/profile";
-         $filename = $code."-".$tName;
-         $file->move($dest,$filename);
-         $user->image = $filename;
+ 
+         $file = $req->file('image')->storeAs(
+            '/',
+            $code.'_'.$req->file('image')->getClientOriginalName(),
+            'profile'
+         );
+         if ($user->image != "/upload/profile/default.png") {
+            File::delete(public_path($user->image));
+         }
+         $user->image = str_replace(env('APP_URL'),'',Storage::disk('profile')->url($file));
+
+     }
+      if ($req->desc != '') {
+         $escape = htmlspecialchars($req->desc);
+         $user->desc = nl2br($escape);
       }
       $user->save();
-      return redirect('/dashboard/')->with(['msg' => 'Profile Updated!','color' => 'success']);
+      return back()->with(['msg' => 'Profile Updated!','color' => 'success']);
    }
    public function file(Request $req)
    {

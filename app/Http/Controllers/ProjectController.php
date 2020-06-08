@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
+    //MAIN PROJECT
     //GET
     public function index() {
         if (!Auth::check()) {
@@ -42,7 +43,11 @@ class ProjectController extends Controller
         }
         $data = Project::where("code",$code)->first();
         $id = $data->id;
-        return view("_teacher.project.detail",["data" => $data, "eid" => $id]);
+        if(Auth::user()->type == 1){
+            return view("_student.project.detail",["data" => $data, "eid" => $id]);
+        }else{
+            return view("_teacher.project.detail",["data" => $data, "eid" => $id]);
+        }
     }
 
     public function addprojectbyid($project_id) {
@@ -60,6 +65,73 @@ class ProjectController extends Controller
         return view("_teacher.project.user_delete",["data" => $data, "eid" => $id]);
     }
 
+    //Project
+    public function insertProject(Request $req)
+    {
+        $req->validate([
+            'code' => 'required|max:8',
+            'topic' => 'required|max:20',
+            'title' => 'required|max:50',
+            'desc' => 'nullable',
+        ]);
+
+        $normalize = Controller::slugger($req->code,"");
+
+        $cek = Project::where('code','=',$normalize)->count();
+        echo $cek;
+        if($cek == 0){
+            $project = new Project();
+            $project->code = $normalize;
+            $project->topic = $req->topic;
+            $project->title = $req->title;
+            if ($req->has('desc')) {
+                $escape = htmlspecialchars($req->desc);
+                $project->desc = nl2br($escape);
+            }
+            $project->save();
+            
+            Storage::disk('project')->makeDirectory($project->code.'/assignment');
+            Storage::disk('project')->makeDirectory($project->code.'/material');
+            
+            $prou = new ProjectUser();
+            $prou->project_id = $project->id;
+            $prou->user_id = Auth::id();
+            $prou->save(); 
+
+            return redirect('/projects/')->with(['msg' => 'Project Added!','color' => 'success']);
+        }else{
+            return redirect('/projects/')->with(['msg' => 'Duplicate Project','color' => 'error']);
+        }
+    }
+    public function updateProject(Request $req)
+    {
+        $req->validate([
+            'topic' => 'required|max:20',
+            'title' => 'required|max:50',
+            'desc' => 'nullable',
+        ]);
+
+        $id = decrypt($req->token);
+        $project = Project::find($id);
+        $project->code = $req->code;
+        $project->topic = $req->topic;
+        $project->title = $req->title;
+        if ($req->has('desc')) {
+            $escape = htmlspecialchars($req->desc);
+            $project->desc = nl2br($escape);
+        }
+        $project->save();
+        return redirect('/projects/')->with(['msg' => 'Project Updated!','color' => 'success']);
+    }
+    public function deleteProject(Request $req)
+    {
+      $id = decrypt($req->token);
+      $project = Project::find($id);
+      $project->delete();
+      return redirect('/projects/')->with(['msg' => 'Project Deleted!','color' => 'success']);
+    }
+    
+    //Phase
     public function addphasebyid($project_id) {
         if (!Auth::check()) {
             return redirect('/');
@@ -82,73 +154,7 @@ class ProjectController extends Controller
         $data = Phase::find($did);
         return view("_teacher.phase.delete",["data" => $data, "eid" => $id]);
     }
-    public function detailphase($id) {
-        if (!Auth::check()) {
-            return redirect('/');
-        }
-        $did = decrypt($id);
-        $data = Phase::find($did);
-        return view("_teacher.phase.detail",["data" => $data, "eid" => $id]);
-    }
 
-    //Project
-    public function insertProject(Request $req)
-    {
-        $req->validate([
-            'code' => 'required|max:8',
-            'topic' => 'required|max:20',
-            'title' => 'required|max:50',
-            'desc' => 'nullable',
-        ]);
-
-        $normalize = Controller::slugger($req->code,"");
-
-        $cek = Project::where('code','=',$normalize)->count();
-        echo $cek;
-        if($cek == 0){
-
-            $project = new Project();
-            $project->code = $normalize;
-            $project->topic = $req->topic;
-            $project->title = $req->title;
-            if ($req->has('desc')) {
-                $project->desc = nl2br($req->desc);
-            }
-            $project->save();
-            Storage::disk('project')->makeDirectory($project->code.'/assignment');
-            Storage::disk('project')->makeDirectory($project->code.'/material');
-            return redirect('/projects/')->with(['msg' => 'Project Added!','color' => 'success']);
-        }else{
-            return redirect('/projects/')->with(['msg' => 'Duplicate Project','color' => 'error']);
-        }
-    }
-    public function updateProject(Request $req)
-    {
-        $req->validate([
-            'topic' => 'required|max:20',
-            'title' => 'required|max:50',
-            'desc' => 'nullable',
-        ]);
-
-        $id = decrypt($req->token);
-        $project = Project::find($id);
-        $project->code = $req->code;
-        $project->topic = $req->topic;
-        $project->title = $req->title;
-        if ($req->has('desc')) {
-            $project->desc = nl2br($req->desc);
-        }
-        $project->save();
-        return redirect('/projects/')->with(['msg' => 'Project Updated!','color' => 'success']);
-    }
-    public function deleteProject(Request $req)
-    {
-      $id = decrypt($req->token);
-      $project = Project::find($id);
-      $project->delete();
-      return redirect('/projects/')->with(['msg' => 'Project Deleted!','color' => 'success']);
-    }
-    //Phase
     public function insertPhase(Request $req)
     {
         $req->validate([
@@ -166,7 +172,8 @@ class ProjectController extends Controller
         $phase->date_due = $req->date_due.' '.$req->time_due.':00';
         $phase->project_id = decrypt($req->token);
         if ($req->has('desc')) {
-            $phase->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $phase->desc = nl2br($escape);
         }
         $phase->save();
         return redirect('/projects/detail/'.$phase->project->code)->with(['msg' => 'Project Phase Added!','color' => 'success']);
@@ -188,7 +195,8 @@ class ProjectController extends Controller
         $phase->date_start = $req->date_start.' '.$req->time_start.':00';
         $phase->date_due = $req->date_due.' '.$req->time_due.':00';
         if ($req->has('desc')) {
-            $phase->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $phase->desc = nl2br($escape);
         }
         $phase->save();
         return redirect('/projects/detail/'.$phase->project->code)->with(['msg' => 'Project Phase Updated!','color' => 'success']);
@@ -200,6 +208,7 @@ class ProjectController extends Controller
       $phase->delete();
       return redirect('/projects/detail/'.$phase->project->code)->with(['msg' => 'Project Phase Deleted!','color' => 'success']);
     }
+
     //ProjectUSer
     public function insertProjectUser(Request $req)
     {
@@ -234,18 +243,28 @@ class ProjectController extends Controller
       $code = Project::find($project_id)->code;
       return redirect('/projects/detail/'.$code)->with(['msg' => 'Project and User Link Deleted!','color' => 'success']);
     }
-
     public function closeForum(Request $req)
     {
         $id = decrypt($req->token);
         $project = Project::find($id);
         $project->hasPreOk = 1;
         if($req->has('desc')){
-            $project->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $project->desc = nl2br($escape);
         }
         $project->save();
 
         return redirect('/projects/detail/'.$project->code)->with(['msg' => 'Project and User Link Deleted!','color' => 'success']);
+    }
+
+    //DEPRECATED || N/A
+    public function detailphase($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Phase::find($did);
+        return view("_teacher.phase.detail",["data" => $data, "eid" => $id]);
     }
 
 }

@@ -23,22 +23,22 @@
                             <div class="form-header default-color">
                                 <h3><i class="fas fa-user"></i> Register:</h3>
                             </div>
-                            <div class="md-form">
+                            <div class="md-form md-outline">
                                 <i class="fas fa-id-badge prefix grey-text"></i>
-                                <input type="text" id="defaultForm-email" class="form-control" name="nama" value="{{old('nama')}}">
+                                <input type="text" id="defaultForm-email" class="form-control" name="fullname" value="{{old('nama')}}">
                                 <label for="defaultForm-email">Full name</label>
                             </div>
-                            <div class="md-form">
+                            <div class="md-form md-outline">
                                 <i class="fas fa-envelope prefix grey-text"></i>
                                 <input type="text" id="defaultForm-email" class="form-control" name="email" value="{{old('email')}}">
                                 <label for="defaultForm-email">Email</label>
                             </div>
-                            <div class="md-form">
+                            <div class="md-form md-outline">
                                 <i class="fas fa-lock prefix grey-text"></i>
                                 <input type="password" id="defaultForm-pass" class="form-control" name="password">
                                 <label for="defaultForm-pass">Password</label>
                             </div>
-                            <div class="md-form">
+                            <div class="md-form md-outline">
                                 <i class="fas fa-lock prefix grey-text"></i>
                                 <input type="password" id="defaultForm-pass" class="form-control" name="cpassword">
                                 <label for="defaultForm-pass">Confirm password</label>
@@ -49,9 +49,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="options">
-                                <p>Sudah ada akun?
-                                    <a href="{{url('/')}}">Sini Login Lah</a>
-                                </p>
+                                <a href="{{url('/')}}">Back To Login</a>
                             </div>
                         </div>
                     </div>
@@ -71,6 +69,12 @@
         new WOW().init();
         @if(session('msg'))
             toastr["{{session('color')}}"]("{{session('msg')}}");
+        @endif
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr['error']("{{$error}}");
+                // alert("{{$error}}");
+            @endforeach
         @endif
     });
 </script>

@@ -22,7 +22,7 @@ SIPEJEK VER 0.0.10
 	- Datetime Picker
 	- Student Side
 	- Teacher Side
-	- Grade System
+	- Score System
 	- Dashboard
 
 - Config File

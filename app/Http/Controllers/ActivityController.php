@@ -15,24 +15,26 @@ use Illuminate\Support\Facades\File;
 class ActivityController extends Controller
 {
     //Main Activity
-    //GET
     public function v_addMaterial($phase_id) {
         if (!Auth::check()) {
             return redirect('/');
         }
-        return view("_teacher.activity.add_material",["phase_id" => $phase_id]);
+        $project = Phase::find(decrypt($phase_id))->project;
+        return view("_teacher.activity.add_material",["project" => $project, "phase_id" => $phase_id]);
     }
     public function v_addAssignment($phase_id) {
         if (!Auth::check()) {
             return redirect('/');
         }
-        return view("_teacher.activity.add_assignment",["phase_id" => $phase_id]);
+        $project = Phase::find(decrypt($phase_id))->project;
+        return view("_teacher.activity.add_assignment",["project" => $project, "phase_id" => $phase_id]);
     }
     public function v_addQuiz($phase_id) {
         if (!Auth::check()) {
             return redirect('/');
         }
-        return view("_teacher.activity.add_quiz",["phase_id" => $phase_id]);
+        $project = Phase::find(decrypt($phase_id))->project;
+        return view("_teacher.activity.add_quiz",["project" => $project, "phase_id" => $phase_id]);
     }
     public function v_editActivity($id) {
         if (!Auth::check()) {
@@ -55,6 +57,9 @@ class ActivityController extends Controller
             return redirect('/');
         }
         $data = Activity::where('slug','=',$slug)->first();
+        if(Auth::user()->type == 1){
+            return redirect('activity/detail/'.$data->slug.'/submission');
+        }
         if($data->type != 'quiz'){
             return view("_teacher.activity.detail",["data" => $data, "auth" => Auth::user()]);
         }else{
@@ -68,7 +73,7 @@ class ActivityController extends Controller
             'title' => 'required|max:50',
             'type' => 'required|max:10',
             'attachment' => 'nullable',
-            'maxgrade' => 'nullable|integer',
+            'maxscore' => 'nullable|integer',
             'desc' => 'nullable|max:191',
         ]);
         $phase = Phase::find(decrypt($req->token));
@@ -93,9 +98,8 @@ class ActivityController extends Controller
                     'project'
                 );
             }elseif ($activity->type == "assignment") {
-                Storage::disk('project')->makeDirectory($path.'/'.$activity->slug);
                 $file = $req->file('attachment')->storeAs(
-                    $path.$activity->slug,
+                    $path."/".$activity->slug,
                     $code.'_'.$req->file('attachment')->getClientOriginalName(),
                     'project'
                 );
@@ -103,14 +107,15 @@ class ActivityController extends Controller
             $activity->attachment = str_replace(env('APP_URL'),'',Storage::disk('project')->url($file));
             // File::delete(public_path($activity->attachment));
         }
-        if ($req->has('maxgrade')) {
-            $activity->maxgrade = $req->maxgrade;
+        if ($req->has('maxscore')) {
+            $activity->maxscore = $req->maxscore;
         }
         if ($req->has('timer')) {
             $activity->timer = $req->timer;
         }
         if ($req->has('desc')) {
-            $activity->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $activity->desc = nl2br($escape);
         }
         $activity->save();
 
@@ -135,7 +140,7 @@ class ActivityController extends Controller
             'title' => 'required|max:50',
             'attachment' => 'nullable',
             'timer' => 'nullable|integer',
-            'maxgrade' => 'nullable|integer',
+            'maxscore' => 'nullable|integer',
             'desc' => 'nullable|max:191',
         ]);
 
@@ -157,9 +162,8 @@ class ActivityController extends Controller
                     'project'
                 );
             }elseif ($activity->type == "assignment") {
-                Storage::disk('project')->makeDirectory($path.'/'.$activity->slug);
                 $file = $req->file('attachment')->storeAs(
-                    $path.$activity->slug,
+                    $path."/".$activity->slug,
                     $code.'_'.$req->file('attachment')->getClientOriginalName(),
                     'project'
                 );
@@ -167,14 +171,15 @@ class ActivityController extends Controller
             File::delete(public_path($activity->attachment));
             $activity->attachment = str_replace(env('APP_URL'),'',Storage::disk('project')->url($file));
         }
-        if ($req->has('maxgrade')) {
-            $activity->maxgrade = $req->maxgrade;
+        if ($req->has('maxscore')) {
+            $activity->maxscore = $req->maxscore;
         }
         if ($req->has('timer')) {
             $activity->timer = $req->timer;
         }
         if ($req->has('desc')) {
-            $activity->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $activity->desc = nl2br($escape);
         }
         $activity->save();
         return redirect('/activity/detail/'.$activity->slug)->with(['msg' => 'Activity Updated!','color' => 'success']);
@@ -208,7 +213,7 @@ class ActivityController extends Controller
         return view("user.comment.delete",["data" => $data, "eid" => $id]);
     }
 
-    public function insertComment(Request $req)
+    public function insertComment(Request $req, $submission = null)
     {
         $req->validate([
             'message' => 'required|max:191',
@@ -221,7 +226,28 @@ class ActivityController extends Controller
         $comment->activity_id = $req->activity_id;
         $comment->user_id = $req->user_id;
         $comment->save();
-        return redirect('/activity/detail/'.$comment->activity->slug)->with(['msg' => 'Comment Added!','color' => 'success']);
+
+        $project = $comment->activity->phase->project;
+        $projectUser = $project->projectuser;
+        foreach($projectUser as $prou){
+            $user = $prou->user;
+            $cek = ($user->type == 1) ? 'submission' : ''; 
+            $details = [
+                'code' => $project->code,
+                'header' => "New Comment",
+                'body' => "Hi, $user->fullname ! ".$comment->user->fullname." Has Posted New Comment In ".$comment->activity->title,
+                'link' => url('/activity/detail/'.$comment->activity->slug.'/'.$cek),
+            ];
+            if($user->id != Auth::id()){
+                $user->notify(new ProjectNotification($details));
+            }
+        }
+
+        if($submission != null){
+            return redirect('/activity/detail/'.$comment->activity->slug.'/submission')->with(['msg' => 'Comment Added!','color' => 'success']);
+        }else{
+            return redirect('/activity/detail/'.$comment->activity->slug)->with(['msg' => 'Comment Added!','color' => 'success']);
+        }
     }
     public function updateComment(Request $req)
     {
@@ -243,51 +269,88 @@ class ActivityController extends Controller
     }
 
     //Submission
+    public function detailSubmission($slug) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $data = Activity::where('slug','=',$slug)->first();
+        if(Auth::user()->type > 1){
+            return redirect('activity/detail/'.$data->slug);
+        }
+        if($data->type != 'quiz'){
+            $submission = $data->assignmentUser()->where('user_id','=',Auth::id());
+            if($submission->count() > 0){
+                return view("_student.activity.detail_submitted",["data" => $data, "submission" => $submission->first(), "auth" => Auth::user()]);
+            }else{
+                return view("_student.activity.detail",["data" => $data, "auth" => Auth::user()]);
+            }
+        }else{
+            $question = $data->questions()->first();
+            $answers = $question->quizUser()->where('user_id','=',Auth::id());
+            if($answers->count() > 0){
+                return view("_student.activity.detail_quiz_submitted",["data" => $data, "answers" => $answers->get(), "auth" => Auth::user()]);
+            }else{
+                return view("_student.activity.detail_quiz",["answers" => $answers->get(), "data" => $data, "auth" => Auth::user()]);
+            }
+        }
+    }
+    public function editSubmission($id) {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Assignment::find($did);
+        return view("_student.activity.edit",["data" => $data, "eid" => $id]);
+    }
+
     public function insertAssignment(Request $req)
     {
         $req->validate([
-            'activity_id' => 'required|exists:pro_activity,id',
-            'user_id' => 'required|exists:users,id',
             'attachment' => 'nullable',
             'desc' => 'nullable|max:191',
         ]);
+        $activity = Activity::find(decrypt($req->token));
+        $phase = $activity->phase;
+        $project = $phase->project;
+
         $assignment = new Assignment();
-        $assignment->user_id = $req->user_id;
-        $assignment->activity_id = $req->activity_id;
+        $assignment->user_id = Auth::id();
+        $assignment->activity_id = decrypt($req->token);
         if ($req->has('attachment')) {
-            $assignment->attachment = $req->attachment;
+            $path = $project->code.'/'.$activity->type;
+            $code = rand(0,1000);
+            $filename = $code.'_'.$req->file('attachment')->getClientOriginalName();
+            $file = $req->file('attachment')->storeAs(
+                $path."/".$activity->slug,
+                $filename,
+                'project'
+            );
+            $assignment->attachment = str_replace(env('APP_URL'),'',Storage::disk('project')->url($file));
+            $assignment->filename = $filename;
         }
         if ($req->has('desc')) {
-            $assignment->desc = $req->desc;
+            $escape = htmlspecialchars($req->desc);
+            $assignment->desc = nl2br($escape);
         }
         $assignment->save();
 
-
-        $activity = $assignment->activity;
-        $phase = $activity->phase;
-        $project = $phase->project;
-        $path = $project->code.'/Assignment/'.$activity->slug;
-
-
-        Storage::disk('project')->makeDirectory($path);
-        Storage::disk('project')->put($path.'/',$req->file('attachment'));
-
-        $user = $assignment->user;
         if($assignment->created_at > $phase->date_due){
+            $sender = $assignment->user;
             $projectUser = $project->projectuser;
             foreach($projectUser as $prou){
                 $user = $prou->user;
-                if($user->type == 2){
+                if($user->type > 1){
                     $details = [
                         'code' => $project->code,
-                        'body' => $user->fullname.' Has Turned In The Assignment Late',
-                        'link' => url()
+                        'header' => "Late Assignment",
+                        'body' => $sender->fullname.' Has Turned In The Assignment Late',
+                        'link' => url('/activity/detail/'.$assignment->activity->slug)
                     ];
                     $user->notify(new ProjectNotification($details));
                 }
             }
         }
-        return redirect('/activities/')->with(['msg' => 'Assignment Added!','color' => 'success']);
+        return redirect('/activity/detail/'.$assignment->activity->slug.'/submission')->with(['msg' => 'Submission Sent!','color' => 'success']);
     }
     public function updateAssignment(Request $req)
     {
@@ -295,41 +358,50 @@ class ActivityController extends Controller
             'attachment' => 'nullable',
             'desc' => 'nullable|max:191',
         ]);
-
         $id = decrypt($req->token);
         $assignment = Assignment::find($id);
-        $old = $assignment->attachment;
-        if ($req->has('attachment')) {
-            $assignment->attachment = $req->attachment;
-        }
-        if ($req->has('desc')) {
-            $assignment->desc = $req->desc;
-        }
-        $assignment->save();
 
         $activity = $assignment->activity;
         $phase = $activity->phase;
         $project = $phase->project;
-        $path = $project->code.'/Assignment/'.$activity->slug;
 
-        if($old) Storage::disk('project')->delete($path.'/'.$old);
 
-        $user = $assignment->user;
+        if ($req->has('attachment')) {
+            $path = $project->code.'/'.$activity->type;
+            $code = rand(0,1000);
+            $filename = $code.'_'.$req->file('attachment')->getClientOriginalName();
+            $file = $req->file('attachment')->storeAs(
+                $path."/".$activity->slug,
+                $filename,
+                'project'
+            );
+            File::delete(public_path($assignment->attachment));
+            $assignment->attachment = str_replace(env('APP_URL'),'',Storage::disk('project')->url($file));
+            $assignment->filename = $filename;
+        }
+        if ($req->has('desc')) {
+            $escape = htmlspecialchars($req->desc);
+            $assignment->desc = nl2br($escape);
+        }
+        $assignment->save();
+
         if($assignment->updated_at > $phase->date_due){
+            $sender = $assignment->user;
             $projectUser = $project->projectuser;
             foreach($projectUser as $prou){
                 $user = $prou->user;
-                if($user->type == 2){
+                if($user->type > 1){
                     $details = [
                         'code' => $project->code,
-                        'body' => $user->fullname.' Has Turned In The Assignment Late',
-                        'link' => url()
+                        'header' => "Late Assignment",
+                        'body' => $sender->fullname.' Has Turned In The Assignment Late',
+                        'link' => url('/activity/detail/'.$assignment->activity->slug)
                     ];
                     $user->notify(new ProjectNotification($details));
                 }
             }
         }
-        return redirect('/activities/')->with(['msg' => 'Assignment Updated!','color' => 'success']);
+        return redirect('/activity/detail/'.$assignment->activity->slug.'/submission')->with(['msg' => 'Submission Updated!','color' => 'success']);
     }
     public function deleteAssignment(Request $req)
     {
@@ -337,5 +409,51 @@ class ActivityController extends Controller
       $assignment = Assignment::find($id);
       $assignment->delete();
       return redirect('/activities/')->with(['msg' => 'Assignment Deleted!','color' => 'success']);
+    }
+
+    //Review
+    public function v_reviewSubmission($id) {
+        if (!Auth::check() || Auth::user()->type == 1) {
+            return redirect('/');
+        }
+        $did = decrypt($id);
+        $data = Assignment::find($did);
+        return view("_teacher.activity.review.assignment",["data" => $data, "eid" => $id]);
+    }
+    public function reviewSubmission(Request $req)
+    {
+        $id = decrypt($req->token);
+        $assignment = Assignment::find($id);
+        $activity = $assignment->activity;
+        $phase = $activity->phase;
+        $project = $phase->project;
+
+        $req->validate([
+            'maxscore' => 'integer',
+            'score' => 'nullable|integer|max:'.$activity->maxscore,
+            'review' => 'nullable',
+        ]);
+
+
+
+
+        if($req->score != ''){
+            $assignment->score = $req->score;
+        }
+        if($req->review != ''){
+            $assignment->review = $req->review;
+        }
+        $assignment->save();
+
+        $user = $assignment->user;
+        $details = [
+            'code' => $project->code,
+            'header' => "Assignment Reviewed",
+            'body' => 'Your Submission Has Been Reviewed',
+            'link' => url('/activity/detail/'.$assignment->activity->slug)
+        ];
+        $user->notify(new ProjectNotification($details));
+
+        return redirect('/activity/detail/'.$assignment->activity->slug)->with(['msg' => 'Submission Reviewed!','color' => 'success']);
     }
 }

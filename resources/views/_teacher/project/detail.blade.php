@@ -8,7 +8,15 @@
 @section('content')
 <div class="container">
     <div class="row mb-4">
-        <div class="col">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{{url('/')}}">Dashboard</a></li>
+                  <li class="breadcrumb-item active">{{$data->code}} - {{$data->title}}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <h5 class="text-center">Project Detail</h5><hr>
@@ -20,22 +28,15 @@
                     <div class="row">
                         <div class="col">
                             <div class="row">
-                                <div class="col-sm-12 col-md">Current Phase Progress : (TBD)</div>
-                                <div class="col-sm-12 col-md-6 ">
-                                    <div class="my-2 progress md-progress" style="height:20px">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 20%; height:20px" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20%</div>
+                                <div class="col">
+                                    <p>Status : {!! ($data->hasPreOk == 1) ? '<span class="badge badge-success">Started</span>' : '<span class="badge badge-danger">Not Started</span>' !!}</p>
+                                    @if ($data->hasPreOk == 1)
+                                    <p>Description :</p>
+                                    <div>
+                                        {!! $data->desc !!}
                                     </div>
+                                    @endif
                                 </div>
-                                <div class="col"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md">Overall Progress : (TBD)</div>
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="my-2 progress md-progress" style="height:20px">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 50%; height:20px" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-                                    </div>
-                                </div>
-                                <div class="col"></div>
                             </div>
                         </div>
                     </div>
@@ -61,16 +62,18 @@
                         </thead>
                         <tbody>
                             @foreach ($data->projectUser as $g)
+                            @if ($g->user->type != 2)                                
                             <tr>
                                 <td>{{$i++}}</td>
                                 <td>{{$g->user->fullname}}</td>
                                 <td>{{$g->user->email}}</td>
-                                <td style="white-space:pre">{{$g->desc}}</td>
+                                <td style="white-space:pre">{!! $g->user->desc !!}</td>
                                 <td>
                                     <a href="#editModal" class="text-warning" data-toggle="modal" data-url="users" data-token="{{encrypt($g->user_id)}}" data-project="{{encrypt($data->id)}}"><i class="fas fa-pencil"></i></a>&nbsp;&nbsp;&nbsp;
                                     <a href="#deleteModal" class="text-danger" data-toggle="modal" data-url="projectuser" data-token="{{encrypt($g->id)}}"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>
+                            @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -112,6 +115,7 @@
             </div>
         </div>
     </div>
+    @if ($data->hasPreOk == 1)        
     <div class="row mb-4">
         <div class="col">
             <div class="card">
@@ -141,11 +145,11 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-6 col-md-2">Start Date : </div>
-                                        <div class="col-sm-6 col-md">{{$ph->date_start}}</div>
+                                        <div class="col-sm-6 col-md">{{Carbon::parse($ph->date_start)->format('M d, Y @ H:i')}}</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6 col-md-2">Due Date : </div>
-                                        <div class="col-sm-6 col-md">{{$ph->date_due}}</div>
+                                        <div class="col-sm-6 col-md">{{Carbon::parse($ph->date_due)->format('M d, Y @ H:i')}}</div>
                                     </div>
                                     {{-- <a href="#addModal" class="btn btn-md btn-info" data-toggle="modal" data-url="activity" data-token="{{encrypt($ph->id)}}"><i class="fas fa-plus"></i> Add new activity</a> --}}
                                     <button class="btn btn-md btn-info dropdown-toggle mr-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-plus"></i> Add new activity</button>
@@ -189,6 +193,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 <div class="just-modals">
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">

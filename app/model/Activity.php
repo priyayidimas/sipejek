@@ -12,6 +12,9 @@ class Activity extends Model
     public function questions(){
         return $this->hasMany('App\model\Quiz','activity_id');
     }
+    public function answers(){
+        return $this->hasManyThrough('App\model\QuizUser','App\model\Quiz','activity_id','question_id');
+    }
     
     //This is One-To-Many (Inversed)
     public function phase()

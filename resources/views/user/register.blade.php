@@ -62,13 +62,13 @@
                         {!! csrf_field() !!}
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="md-form">
+                                <div class="md-form md-outline">
                                     <input type="text" id="target" class="form-control" name="fullname" required">
                                     <label for="materialLoginFormEmail" class="active">Full Name</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="md-form">
+                                <div class="md-form md-outline">
                                     <input type="text" id="target" class="form-control" name="email" required>
                                     <label for="materialLoginFormEmail" class="active">Email</label>
                                 </div>
@@ -76,13 +76,13 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="md-form">
+                                <div class="md-form md-outline">
                                     <input type="password" id="target" class="form-control" name="password" required">
                                     <label for="materialLoginFormEmail" class="active">Password</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <select id="sel" class="mdb-select md-form colorful-select dropdown-danger" name="type" required>
+                                <select id="sel" class="mdb-select md-form md-outline colorful-select dropdown-danger" name="type" required>
                                     <option disabled>Select Type...</option>
                                     <option value="2">Teacher</option>
                                     <option value="1">Student</option>
@@ -91,7 +91,7 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <div class="md-form">
+                                <div class="md-form md-outline">
                                     <p>Description</label>
                                     <textarea name="desc" id="" cols="30" rows="3" class="form-control md-textarea"></textarea>
                                 </div>
@@ -138,7 +138,7 @@ $(document).ready(function () {
         $this.removeClass('form-control-sm');
     });
     $('#dtTable_wrapper .dataTables_length').addClass('d-flex flex-row');
-    $('#dtTable_wrapper .dataTables_filter').addClass('md-form');
+    $('#dtTable_wrapper .dataTables_filter').addClass('md-form md-outline');
     $('#dtTable_wrapper select').removeClass(
     'custom-select custom-select-sm form-control form-control-sm');
     $('#dtTable_wrapper select').addClass('mdb-select');

@@ -3,9 +3,15 @@
     <input type="hidden" name="token" value="{{$eid}}">
     <div class="row">
         <div class="col-md-12">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <input type="text" id="target" class="form-control" name="question" placeholder=" " required value="">
                 <label for="materialLoginFormEmail" class="active">Type Question</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="md-form md-outline">
+                <input type="text" id="target" class="form-control" name="maxscore" placeholder=" " required value="">
+                <label for="materialLoginFormEmail" class="active">Max Score</label>
             </div>
         </div>
     </div>

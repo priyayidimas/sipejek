@@ -3,7 +3,7 @@
     <input type="hidden" name="token" value="{{$project_id}}">
     <div class="row">
         <div class="col-md-12">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <input type="number" id="target" class="form-control" name="groups" placeholder=" " required>
                 <label for="materialLoginFormEmail" class="active">How Many Groups?</label>
             </div>

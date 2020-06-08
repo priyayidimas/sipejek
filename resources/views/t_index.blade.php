@@ -58,6 +58,40 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <p id="modalTitle" class="heading lead"></p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row profileLoader">
+                        <div class="col-md-12" style="text-align: center">
+                            <div class="preloader-wrapper active">
+                                <div class="spinner-layer spinner-blue-only ">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profileContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript" src="{{url('/assets/js/jquery.min.js')}}"></script>
 <script type="text/javascript" src="{{url('/assets/js/popper.min.js')}}"></script>
@@ -72,6 +106,8 @@
             twelvehour: false
         });
         $(".button-collapse").sideNav();
+        $('.mdb-select').materialSelect();
+
         var sideNavScrollbar = document.querySelector('.custom-scrollbar');
         var ps = new PerfectScrollbar(sideNavScrollbar);
 
@@ -81,11 +117,9 @@
         @if ($errors->any())
             @foreach ($errors->all() as $error)
                 toastr['error']("{{$error}}");
-                // alert("{{$error}}");
             @endforeach
         @endif
 
-        $('.mdb-select').materialSelect();
         $("#mdb-lightbox-ui").load("assets/css/mdb-addons/mdb-lightbox-ui.html");
 
         $("#notificationModal").on('show.bs.modal', function () {
@@ -101,9 +135,26 @@
         });
         $("#notificationModal").on('hide.bs.modal', function () {
             var modal = $(this);
-            modal.find('.deleteLoader').css('display','block');
-            modal.find('.deleteContent').css('display','none');
+            modal.find('.notificationLoader').css('display','block');
+            modal.find('.notificationContent').css('display','none');
             $('.notifCount').css('display','none');
+        });
+
+        $("#profileModal").on('show.bs.modal', function () {
+            var modal = $(this);
+            modal.find('#modalTitle').html('Edit Profile');
+            setTimeout(function () { 
+                modal.find('.profileLoader').css('display','none');
+                modal.find('.profileContent').css('display','block');
+            },400);
+            setTimeout(function () { 
+                modal.find('.profileContent').load('/myProfile');
+            },300);
+        });
+        $("#profileModal").on('hide.bs.modal', function () {
+            var modal = $(this);
+            modal.find('.profileLoader').css('display','block');
+            modal.find('.profileContent').css('display','none');
         });
     });
 </script>

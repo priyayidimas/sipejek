@@ -1,90 +1,64 @@
-@extends('t_index')
-@section('title')
-    My Profile
-@endsection
-
-@section('content')
-<div class="container">    
     <div class="row">
-        <div class="col">
-            <div class="card mb-2">
-                <div class="card-body">
-                    <h5>My Profile</h5><hr>
-                </div>
-            </div>
-            <form action="{{url('updateProfile')}}" method="post" enctype="multipart/form-data">
+        <div class="col-12">
+        
+            <form action="{{url('updateProfile')}}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="token" value="{{encrypt($data->id)}}">
-                <div class="row mb-2">
-                    <div class="col-lg-4 mx-auto">
-                        <div class="card-wrapper">
-                            <div id="card-2" class="card card-rotating text-center">
-                                <div class="face front">
-                                    <div class="card-up">
-                                        <img src="{{url('assets/img/sample.jpg')}}" class="img-fluid">
-                                    </div>
-                                    <div class="avatar mx-auto white">
-                                        <img src="{{url('upload/profile/'.$data->image)}}" class="rounded-circle" alt="Sample avatar image.">
-                                    </div>
-                                    <div class="card-body">
-                                        <h4>{{$data->fullname}}</h4>
-                                        <p>{{$data->email}}</p>
-                                        <a class="rotate-btn" data-card="card-2"><i class="fas fa-redo-alt"></i> Click here to rotate</a>
-                                    </div>
-                                </div>
-                                <div class="card face back">
-                                    <div class="card-body">
-                                        <h4>Edit Profile</h4>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="md-form">
-                                                    <div class="file-field">
-                                                        <div class="btn btn-primary btn-sm float-left">
-                                                            <span>Choose file</span>
-                                                            <input type="file" name="image">
-                                                        </div>
-                                                        <div class="file-path-wrapper">
-                                                            <input class="file-path validate" type="text" placeholder="Upload your Photo">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="md-form">
-                                                        <input type="text" class="form-control" name="email" value="{{$data->email}}">
-                                                        <label class="">Email</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="md-form">
-                                                        <input type="text" class="form-control" name="fullname" value="{{$data->fullname}}">
-                                                        <label class="">Fullname</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="md-form">
-                                                        <input type="password" class="form-control" name="nPassword">
-                                                        <label class="">New Password</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <button type="submit" class="btn btn-success btn-md">Submit</button>
-                                        <a class="btn btn-flat black-text rotate-btn" data-card="card-2"><i class="fas fa-undo"></i> Back</a>
-      
-                                    </div>
-      
-                                </div>
-                                <!--/.Back Side-->
-      
+                <input type="hidden" name="token" value="{{encrypt($auth->id)}}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="md-form md-outline">
+                            <label class="active" for="">Fullname</label>
+                            <input type="text" class="form-control" name="fullname" value="{{$auth->fullname}}" placeholder=" " required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="md-form md-outline">
+                                <label class="active" for="">Email</label>
+                                <input type="text" class="form-control" name="email" value="{{$auth->email}}" placeholder=" " required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="md-form md-outline">
+                                <label class="active" for="">Password</label>
+                                <input type="password" class="form-control" name="password" placeholder="Fill If Need To Change Password">
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                    </div>
+                    @if ($auth->type > 1)
+                    <h5>Profile Photo</h5><br>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <img src="{{url(''.$auth->image)}}" class="img-fluid" alt="" style="width: 150px; height: 150px">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="md-form md-outline">
+                                <div class="file-field">
+                                    <div class="file-path-wrapper">
+                                        <input type="text" class="file-path validate" placeholder="Only if need to change photo">
+                                    </div>
+                                    <div class="btn btn-primary btn-sm float-left">
+                                        <span>Choose File</span>
+                                        <input type="file" name="image">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div><br><br>
+                    @else
+                    <div class="md-form md-outline">
+                        <label class="active" for="">Group Description</label>
+                        <textarea name="desc" id="" cols="30" rows="5" class="form-control md-textarea">{!! str_replace("<br />","&#13;",$auth->desc)!!}</textarea>
+                    </div>
+                    @endif
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-success" type="submit">Submit</button>
+                    </div>
                 </div>
             </form>
+          
         </div>
     </div>
-</div>
-@endsection

@@ -24,11 +24,6 @@
                 <div class="card-body">
                     <h4 class="card-title">
                         <span class="text-capitalize">{{$data->type}}</span> <i class="fas fa-angle-right"></i> {{$data->title}}
-                        <button class="ml-auto float-right btn btn-danger btn-sm" data-target="#deleteModal" data-toggle="modal" data-url="activity" data-token="{{encrypt($data->id)}}" style="padding: 10px; margin: 5px"><i class="fas fa-trash"></i></button>
-                        <button class="ml-auto float-right btn btn-warning btn-sm" data-target="#editModal" data-toggle="modal" data-url="activity" data-token="{{encrypt($data->id)}}" style="padding: 10px; margin: 5px"><i class="fas fa-pencil"></i></button>
-                        @if ($data->type == 'assignment')
-                        <a href="{{url('/lfm?leftDisk=project&leftPath='.$path)}}" target="_blank" class="ml-auto float-right btn btn-success btn-sm" style="padding: 10px; margin: 5px"><i class="fas fa-file"></i></a>
-                        @endif
                     </h4>
                 </div>
             </div>
@@ -37,7 +32,7 @@
     <div class="row mb-4">
         <div class="col-md-8">
             <div class="row mb-4">
-                <div class="col">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">     
         
@@ -52,72 +47,42 @@
                     </div>
                 </div>
             </div>
-            @if ($data->type == 'assignment')                
-            <div class="row mb-2">
-                <div class="col">
+            @if ($data->type == 'assignment')
+            <div class="row mb-4">
+                <div class="col-md-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body">     
+        
                             <div class="row">
-        
                                 <div class="col-md-12">
-                                    <p><b>Student Submissions</b></p>
+                                    @if ($submission->score == null)
+                                    <div class="ml-auto float-right">
+                                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-ellipsis-v"></i></a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#editModal" data-toggle="modal" data-url="submission" data-token="{{encrypt($submission->id)}}">Edit</a>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <p><b>Your Submission</b></p>
                                     <hr>
-                                </div>
-        
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="submissions">
-
-                <div class="row mb-4">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <table id="dtTable" class="table table-striped" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="th-sm">Group Name</th>
-                                            <th class="th-sm">Status</th>
-                                            <th class="th-sm">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($project->projectUser as $g)
-                                        @if ($g->user->type != 2)        
-                                        @php
-                                            $submission = $g->user->assignmentUser()->where('activity_id','=',$data->id);
-                                            $badge = "";
-                                            if($submission->count() < 1){
-                                                $badge = '<span class="badge badge-danger">Not Submitted</span>';
-                                            }elseif ($submission->first()->score == null) {
-                                                $badge = '<span class="badge badge-warning">Submission Sent</span>';
-                                            }else{
-                                                $badge = '<span class="badge badge-success">Submission Scored</span>';
-                                            }
-                                        @endphp                        
-                                        <tr>
-                                            <td><a href="#detailModal" class="text-info" data-toggle="modal" data-url="users" data-token="{{encrypt($g->user_id)}}">{{$g->user->fullname}}</a></td>
-                                            <td>{!! $badge !!}</td>
-                                            @if ($submission->count() > 0)
-                                            <td><button class="btn btn-success btn-sm" data-toggle="modal" data-target="#successModal" data-url="reviewAssignment" data-token="{{encrypt($submission->first()->id)}}">Review</button></td>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @if ($submission->attachment != null)
+                                            <p>Attachment : <a href="{{url(''.$submission->attachment)}}">{{$submission->filename}}</a></p>
                                             @endif
-                                        </tr>
-                                        @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
-
+                                            <p>Description :</label>
+                                            <p>{!! $submission->desc !!}</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+        
                         </div>
                     </div>
                 </div>
-
             </div>
             @endif
+
 
         </div>
         <div class="col-md-4">
@@ -129,7 +94,10 @@
                                 <div class="col-md-12">
                                     @if ($data->type == 'assignment')
                                     <div class="ml-auto">
-                                        <h6>Max Score: {{$data->maxscore}}</h6>
+                                        <h6>Score : {{($submission->score == null ? 'Not Scored Yet' : "$submission->score / $data->maxscore " )}}</h6>
+                                    </div>
+                                    <div class="review">
+                                     {!! ($submission->review != '') ? 'Review : '.$submission->review : ''!!}
                                     </div>
                                     @endif
                                     <br>
@@ -182,13 +150,13 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{url('/comment/add')}}" method="post">
+                            <form action="{{url('/comment/add/submission')}}" method="post">
                                 @csrf
                                 <input type="hidden" name="activity_id" value="{{($data->id)}}">
                                 <input type="hidden" name="user_id" value="{{($auth->id)}}">
                                 <div class="md-form md-outline">
-                                    <input placeholder="" type="text" name="message" class="form-control" size="40">
-                                    <label for="date-picker-example">Add New Comment</label>
+                                    <input type="text" name="message" class="form-control" size="40">
+                                    <label for="example">Add New Comment</label>
                                 </div>
                                 <button class="float-right btn btn-success btn-sm" type="submit">Submit</button>
                             </form>
@@ -264,74 +232,6 @@
                         </div>
                     </div>
                     <div class="deleteContent"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-notify modal-info" role="document">
-            <div class="modal-content">
-                <!--Header-->
-                <div class="modal-header">
-                    <p id="modalTitle" class="heading lead"></p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="white-text">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="row infoLoader">
-                        <div class="col-md-12" style="text-align: center">
-                            <div class="preloader-wrapper active">
-                                <div class="spinner-layer spinner-blue-only ">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="gap-patch">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="circle-clipper right">
-                                        <div class="circle"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="infoContent"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-notify modal-success" role="document">
-            <div class="modal-content">
-                <!--Header-->
-                <div class="modal-header">
-                    <p id="modalTitle" class="heading lead"></p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="white-text">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="row forumLoader">
-                        <div class="col-md-12" style="text-align: center">
-                            <div class="preloader-wrapper active">
-                                <div class="spinner-layer spinner-green-only ">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="gap-patch">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="circle-clipper right">
-                                        <div class="circle"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="forumContent"></div>
                 </div>
             </div>
         </div>

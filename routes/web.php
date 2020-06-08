@@ -27,10 +27,13 @@ Route::get('myProfile', 'UserController@myProfile');
 Route::get('showNotification', 'UserController@showNotification');
 //USERS
 Route::get('users', 'UserController@view');
+Route::get('users/verify/{id}', 'UserController@verify');
 Route::get('users/edit/{id}', 'UserController@editbyid');
 Route::get('users/edit/{id}/{project_id}', 'UserController@editbyid');
 Route::get('users/delete/{id}', 'UserController@deletebyid');
 Route::get('users/delete/{id}/{project_id}', 'UserController@deletebyid');
+Route::get('users/detail/{id}', 'UserController@detail');
+
 
 Route::post('users/add', 'UserController@insertUser');
 Route::post('users/edit', 'UserController@updateUser');
@@ -57,6 +60,10 @@ Route::post('prequestion/add', 'PrequestionController@insertPrequestion');
 Route::post('prequestion/edit', 'PrequestionController@updatePrequestion');
 Route::post('prequestion/delete', 'PrequestionController@deletePrequestion');
 Route::post('prequestion/closeforum', 'ProjectController@closeForum');
+
+Route::get('prequestion/answer/add/{prequestion_id}', 'PrequestionController@v_addAnswer');
+Route::post('prequestion/answer/add', 'PrequestionController@insertPrequestionUser');
+Route::post('prequestion/answer/edit', 'PrequestionController@updatePrequestionUser');
 
 //Project X Users
 Route::get('projectuser/add/{project_id}', 'ProjectController@addprojectbyid');
@@ -87,11 +94,18 @@ Route::post('activity/add', 'ActivityController@insertActivity');
 Route::post('activity/edit', 'ActivityController@updateActivity');
 Route::post('activity/delete', 'ActivityController@deleteActivity');
 
+//Assignment
+Route::get('activity/detail/{slug}/submission', 'ActivityController@detailSubmission');
+Route::get('submission/edit/{id}', 'ActivityController@editSubmission');
+
+Route::post('submission/add', 'ActivityController@insertAssignment');
+Route::post('submission/edit', 'ActivityController@updateAssignment');
+
 //Comments
 Route::get('comment/edit/{id}', 'ActivityController@v_editComment');
 Route::get('comment/delete/{id}', 'ActivityController@v_deleteComment');
 
-Route::post('comment/add', 'ActivityController@insertComment');
+Route::post('comment/add/{submission?}', 'ActivityController@insertComment');
 Route::post('comment/edit', 'ActivityController@updateComment');
 Route::post('comment/delete', 'ActivityController@deleteComment');
 
@@ -99,7 +113,7 @@ Route::post('comment/delete', 'ActivityController@deleteComment');
 Route::get('activity/add/quiz/{phase_id}', 'ActivityController@v_addQuiz');
 Route::post('activity/add/quiz/', 'QuizController@newQuiz');
 
-//Quesion
+//Question
 Route::get('question/add/{activity_id}', 'QuizController@v_addQuestion');
 Route::get('question/edit/{id}', 'QuizController@v_editQuestion');
 Route::get('question/delete/{id}', 'QuizController@v_deleteQuestion');
@@ -107,6 +121,16 @@ Route::get('question/delete/{id}', 'QuizController@v_deleteQuestion');
 Route::post('question/add/', 'QuizController@insertQuestion');
 Route::post('question/edit', 'QuizController@updateQuestion');
 Route::post('question/delete', 'QuizController@deleteQuestion');
+
+Route::post('answer/add/', 'QuizController@insertAnswer');
+Route::post('answer/edit', 'QuizController@updateAnswer');
+
+//Review
+Route::get('reviewAssignment/{id}', 'ActivityController@v_reviewSubmission');
+Route::post('reviewAssignment', 'ActivityController@reviewSubmission');
+
+Route::get('reviewQuiz/{userid}/{activityid}', 'QuizController@v_reviewSubmission');
+Route::post('reviewQuiz', 'QuizController@reviewSubmission');
 
 //DEBUG
 Route::get('demo-css', function () {

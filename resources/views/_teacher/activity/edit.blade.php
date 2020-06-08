@@ -3,7 +3,7 @@
     <input type="hidden" name="token" value="{{$eid}}">
     <div class="row">
         <div class="col-md-12">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <input type="text" id="target" class="form-control" name="title" placeholder=" " required value="{{$data->title}}">
                 <label for="materialLoginFormEmail" class="active">Title</label>
             </div>
@@ -12,7 +12,7 @@
     @if ($data->type != 'quiz')
     <div class="row">
         <div class="col">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <p>Description</label>
                 <textarea name="desc" id="" cols="30" rows="3" class="form-control md-textarea">{!! str_replace("<br />","&#13;",$data->desc) !!}</textarea>
             </div>
@@ -22,9 +22,9 @@
     @if ($data->type != 'material')
     <div class="row">
         <div class="col-md-12">
-            <div class="md-form">
-                <input type="text" id="target" class="form-control" name="maxgrade" placeholder=" " required value="100">
-                <label for="materialLoginFormEmail" class="active">Max Grade</label>
+            <div class="md-form md-outline">
+                <input type="text" id="target" class="form-control" name="maxscore" placeholder=" " required value="100">
+                <label for="materialLoginFormEmail" class="active">Max Score</label>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
     @if ($data->type != 'quiz')
     <div class="row">
         <div class="col-md-12">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <div class="file-field">
                     <div class="btn btn-primary btn-sm float-left">
                         <span>Choose file</span>

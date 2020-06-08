@@ -4,12 +4,12 @@
     <p>Are you sure want to proceed? Students can't no longer answer the preliminary questions.</p>
     <div class="row">
         <div class="col">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <p>Conclusion</label>
                 <textarea name="desc" id="" cols="30" rows="5" class="form-control md-textarea"></textarea>
             </div>
         </div>
     </div>
-    <button type="submit" class="btn red white-text waves-effect waves-light">Proceed</button>
+    <button type="submit" class="btn green white-text waves-effect waves-light">Proceed</button>
     <button type="button" class="btn btn-flat waves-effect" data-dismiss="modal">Cancel</button>
 </form>

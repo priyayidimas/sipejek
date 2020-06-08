@@ -12,18 +12,22 @@
       <li>
         <ul class="collapsible collapsible-accordion">
           <li><a class="collapsible-header waves-effect" href="{{url('dashboard')}}"><i class="fas fa-desktop"></i> Dashboard </a></li>
+          @if ($auth->id == 1)
           <li><a class="collapsible-header waves-effect" href="{{url('projects')}}"><i class="fas fa-code"></i> Projects </a></li>
           <li><a class="collapsible-header waves-effect" href="{{url('users')}}"><i class="fas fa-user "></i> Users </a></li>
-          {{-- <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-chevron-right"></i> Menu <i class="fas fa-angle-down rotate-icon"></i></a>
+          @endif
+          @if ($auth->projectUser->count() > 0)
+          <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-code"></i> Projects <i class="fas fa-angle-down rotate-icon"></i></a>
             <div class="collapsible-body">
               <ul>
-                <li><a href="#" class="waves-effect">Submit listing</a>
+                @foreach ($auth->projectUser as $pu)
+                <li><a href="{{url('projects/detail/'.$pu->project->code)}}" class="waves-effect">{{$pu->project->title}}</a>
                 </li>
-                <li><a href="#" class="waves-effect">Registration form</a>
-                </li>
+                @endforeach
               </ul>
             </div>
-          </li> --}}
+          </li>
+          @endif
 
         </ul>
       </li>
@@ -55,7 +59,7 @@
           <i class="fa fa-user"></i> <span class="clearfix d-none d-sm-inline-block">{{$auth->nama}}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="{{url('myProfile')}}">Change Profile</a>
+          <a class="dropdown-item" data-toggle="modal" href="#profileModal">Change Profile</a>
           <a class="dropdown-item" href="{{url('logout')}}">Logout</a>
         </div>
       </li>

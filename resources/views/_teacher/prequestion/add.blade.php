@@ -3,7 +3,7 @@
     <input type="hidden" name="token" value="{{$project_id}}">
     <div class="row">
         <div class="col-md-12">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <input type="text" id="target" class="form-control" name="question" placeholder=" " required>
                 <label for="materialLoginFormEmail" class="active">Question</label>
             </div>
@@ -11,7 +11,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <p>Description</label>
                 <textarea name="desc" id="" cols="30" rows="5" class="form-control md-textarea"></textarea>
             </div>

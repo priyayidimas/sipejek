@@ -123,7 +123,7 @@
                 <th rowspan="2" style="width:25%">
                     <b>Nilai Kegiatan</b>
                     <h1>108/108</h1>
-                    <b>Grade</b>
+                    <b>Score</b>
                     <h1>A</h1>
                 </th>
             </tr>

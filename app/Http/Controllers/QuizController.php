@@ -10,15 +10,15 @@ use App\model\Phase;
 use App\model\Activity;
 use App\Notifications\ProjectNotification;
 use Illuminate\Support\Facades\Auth;
+use App\model\User;
 
 class QuizController extends Controller
 {
-    
+    //QUIZ
     public function newQuiz(Request $req)
     {
         $req->validate([
             'title' => 'required|max:50',
-            'maxgrade' => 'nullable|integer',
             'essay' => 'required|max:50'
         ]);
         $phase = Phase::find(decrypt($req->token));
@@ -33,16 +33,16 @@ class QuizController extends Controller
         $activity->type = 'quiz';
         $activity->phase_id = decrypt($req->token);
 
-        if ($req->has('maxgrade')) {
-            $activity->maxgrade = $req->maxgrade;
-        }
         $activity->save();
-        foreach ($req->essay as $essay) {
+        for ($i=0; $i < count($req->essay); $i++) { 
             $question = new Quiz();
-            $question->question = $essay;
+            $question->question = $req->essay[$i];
+            $question->maxscore = $req->maxscore[$i];
             $question->activity_id = $activity->id;
             $question->save();
         }
+        $activity->maxscore = $activity->questions()->sum('maxscore');
+        $activity->save();
 
         $projectUser = $project->projectuser;
         foreach($projectUser as $prou){
@@ -60,6 +60,7 @@ class QuizController extends Controller
         return redirect('/projects/detail/'.$project->code)->with(['msg' => 'New Quiz Added!','color' => 'success']);
     }
 
+    //QUESTIONS
     public function v_addQuestion($activity_id) {
         if (!Auth::check()) {
             return redirect('/');
@@ -91,11 +92,19 @@ class QuizController extends Controller
 
         $quiz = new Quiz();
         $quiz->question = $req->question;
+        $quiz->maxscore = $req->maxscore;
         $quiz->activity_id = decrypt($req->token);
         if ($req->has('desc')) {
-            $quiz->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $quiz->desc = nl2br($escape);
         }
         $quiz->save();
+
+        $sum = $quiz->activity->questions()->sum('maxscore');
+
+        $activity = Activity::find($quiz->activity->id);
+        $activity->maxscore= $sum;
+        $activity->save();
         return redirect('/activity/detail/'.$quiz->activity->slug)->with(['msg' => 'Quiz Question Added!','color' => 'success']);
     }
     public function updateQuestion(Request $req)
@@ -107,11 +116,19 @@ class QuizController extends Controller
         $id = decrypt($req->token);
         $quiz = Quiz::find($id);
         $quiz->question = $req->question;
+        $quiz->maxscore = $req->maxscore;
         $quiz->isMultiple = ($req->has('isMultiple')) ? 1 : 0;
         if ($req->has('desc')) {
-            $quiz->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $quiz->desc = nl2br($escape);
         }
         $quiz->save();
+
+        $sum = $quiz->activity->questions()->sum('maxscore');
+
+        $activity = Activity::find($quiz->activity->id);
+        $activity->maxscore= $sum;
+        $activity->save();
         return redirect('/activity/detail/'.$quiz->activity->slug)->with(['msg' => 'Quiz Question Updated!','color' => 'success']);
 
     }
@@ -124,6 +141,79 @@ class QuizController extends Controller
       $quiz->delete();
       return redirect('/activity/detail/'.$slug)->with(['msg' => 'Quiz Question Deleted!','color' => 'success']);
     }
+
+    //Answers
+    public function insertAnswer(Request $req)
+    {
+        $req->validate([
+            'answer' => 'required|max:191',
+        ]);
+
+        $activity = Activity::find(decrypt($req->session));
+        $project = $activity->phase->project;
+
+        for ($i=0; $i < count($req->answer); $i++) { 
+            $quizU = new QuizUser();
+            $quizU->answer = $req->answer[$i];
+            $quizU->question_id = decrypt($req->token[$i]);
+            $quizU->user_id = Auth::id();
+            $quizU->save();
+        }
+
+        if($quizU->created_at > $activity->phase->date_due){
+            $sender = $quizU->user;
+            $projectUser = $project->projectuser;
+            foreach($projectUser as $prou){
+                $user = $prou->user;
+                if($user->type > 1){
+                    $details = [
+                        'code' => $project->code,
+                        'header' => "Late Quiz Submission",
+                        'body' => $sender->fullname.' Has Turned In The Quiz Late',
+                        'link' => url('/activity/detail/'.$activity->slug)
+                    ];
+                    $user->notify(new ProjectNotification($details));
+                }
+            }
+        }
+
+        return redirect('/projects/detail/'.$project->code)->with(['msg' => 'Quiz Submitted!','color' => 'success']);
+    }
+
+    //Review
+    public function v_reviewSubmission($activityid, $userid) {
+        if (!Auth::check() || Auth::user()->type == 1) {
+            return redirect('/');
+        }
+        $data = Activity::find($activityid);
+        return view("_teacher.activity.review.quiz",["data" => $data, "eid" => $activityid, "user_id" => $userid]);
+    }
+
+    public function reviewSubmission(Request $req)
+    {
+
+        $activity = Activity::find(decrypt($req->session));
+        $project = $activity->phase->project;
+
+        for ($i=0; $i < count($req->score); $i++) { 
+            $quizU = QuizUser::find(decrypt($req->token[$i]));
+            $quizU->score = $req->score[$i];
+            $quizU->save();
+        }
+
+        $user = $quizU->user;
+        $details = [
+            'code' => $project->code,
+            'header' => "Late Quiz Submission",
+            'body' => 'Hi, '.$user->fullname.'! Your Quiz Has Been Graded',
+            'link' => url('/activity/detail/'.$activity->slug.'/submission')
+        ];
+        $user->notify(new ProjectNotification($details));
+
+        return redirect('/activity/detail/'.$activity->slug)->with(['msg' => 'Quiz Graded!','color' => 'success']);
+    }
+
+    //CHOICES (TBD)
     public function insertQuizChoice(Request $req)
     {
         $req->validate([
@@ -158,22 +248,9 @@ class QuizController extends Controller
       $choice->delete();
       return redirect('/quizes/')->with(['msg' => 'Quiz Choice Deleted!','color' => 'success']);
     }
-    public function insertQuizUser(Request $req)
-    {
-        $req->validate([
-            'answer' => 'required|max:191',
-            'question_id' => 'required|exists:pro_act_quiz_question,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
 
-        $quizU = new QuizUser();
-        $quizU->answer = $req->answer;
-        $quizU->question_id = $req->question_id;
-        $quizU->user_id = $req->user_id;
-        $quizU->save();
-        return redirect('/quizes/')->with(['msg' => 'Quiz Answer Added!','color' => 'success']);
-    }
-    public function updateQuizUser(Request $req)
+    //DEPRECATED ||  N/A
+    public function updateAnswer(Request $req)
     {
         $req->validate([
             'answer' => 'required|max:191',
@@ -185,6 +262,7 @@ class QuizController extends Controller
         $quizU->save();
         return redirect('/quizes/')->with(['msg' => 'Quiz Answer Updated!','color' => 'success']);
     }
+
     public function deleteQuizUser(Request $req)
     {
       $id = decrypt($req->token);

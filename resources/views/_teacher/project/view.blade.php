@@ -8,7 +8,15 @@
 @section('content')
 <div class="container">    
     <div class="row">
-        <div class="col">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{{url('/')}}">Dashboard</a></li>
+                  <li class="breadcrumb-item active">Projects</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <h5>Projects</h5><hr>
@@ -19,7 +27,7 @@
                                 <th class="th-sm">No</th>
                                 <th class="th-sm">Code</th>
                                 <th class="th-sm">Title</th>
-                                <th class="th-sm">Begin?</th>
+                                <th class="th-sm">Status</th>
                                 <th class="th-sm">Desc</th>
                                 <th class="th-sm">Action</th>
                             </tr>
@@ -30,7 +38,7 @@
                                 <td>{{$n++}}</td>
                                 <td>{{$d->code}}</td>
                                 <td><a class="blue-text" href="{{url('/projects/detail/'.$d->code)}}">{{$d->topic." : ".$d->title}}</a></td>
-                                <td>{{$d->hasPreOk}}</td>
+                                <td>{!! ($d->hasPreOk == 1) ? '<span class="badge badge-success">Started</span>' : '<span class="badge badge-danger">Not Started</span>' !!}</td>
                                 <td style="white-space:pre">{{$d->desc}}</td>
                                 <td><a href="#theModal" class="text-warning" data-toggle="modal" data-action="edit" data-token="{{encrypt($d->id)}}"><i class="fas fa-pencil"></i></a>&nbsp;&nbsp;&nbsp;<a href="#theModal" class="text-danger" data-toggle="modal" data-action="delete" data-token="{{encrypt($d->id)}}"><i class="fas fa-trash"></i></a></td>
                             </tr>
@@ -59,13 +67,13 @@
                         {!! csrf_field() !!}
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="md-form">
+                                <div class="md-form md-outline">
                                     <input type="text" id="target" class="form-control" name="code" required">
                                     <label for="materialLoginFormEmail" class="active">Code</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="md-form">
+                                <div class="md-form md-outline">
                                     <input type="text" id="target" class="form-control" name="topic" required>
                                     <label for="materialLoginFormEmail" class="active">Topic</label>
                                 </div>
@@ -73,7 +81,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="md-form">
+                                <div class="md-form md-outline">
                                     <input type="text" id="target" class="form-control" name="title" required">
                                     <label for="materialLoginFormEmail" class="active">Title</label>
                                 </div>

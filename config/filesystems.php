@@ -61,6 +61,13 @@ return [
             'url' => env('APP_URL').'/upload/projects',
             'visibility' => 'public',
         ],
+        
+        'profile' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/profile'),
+            'url' => env('APP_URL').'/upload/profile',
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',

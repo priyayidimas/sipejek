@@ -3,7 +3,7 @@
     <input type="hidden" name="token" value="{{$eid}}">
     <div class="row">
         <div class="col-md-12">
-            <div class="md-form">
+            <div class="md-form md-outline">
                 <input type="text" id="target" class="form-control" name="message" placeholder=" " required value="{{$data->message}}">
                 <label for="materialLoginFormEmail" class="active">Message</label>
             </div>

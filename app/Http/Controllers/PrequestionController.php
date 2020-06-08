@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PrequestionController extends Controller
 {
+    //MAIN PREQUESTION
     //GET
     public function add($project_id) {
         if (!Auth::check()) {
@@ -58,10 +59,11 @@ class PrequestionController extends Controller
         $prequestion->question = $req->question;
         $prequestion->project_id = decrypt($req->token);
         if ($req->has('desc')) {
-            $prequestion->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $prequestion->desc = nl2br($escape);
         }
         $prequestion->save();
-        return redirect('/projects/detail/'.$req->token)->with(['msg' => 'Preliminary Question Added!','color' => 'success']);
+        return redirect('/projects/detail/'.$prequestion->project->code)->with(['msg' => 'Preliminary Question Added!','color' => 'success']);
     }
     public function updatePrequestion(Request $req)
     {
@@ -73,32 +75,50 @@ class PrequestionController extends Controller
         $prequestion = Prequestion::find($id);
         $prequestion->question = $req->question;
         if ($req->has('desc')) {
-            $prequestion->desc = nl2br($req->desc);
+            $escape = htmlspecialchars($req->desc);
+            $prequestion->desc = nl2br($escape);
         }
         $prequestion->save();
-        return redirect('/projects/detail/'.encrypt($prequestion->project_id))->with(['msg' => 'Preliminary Question Updated!','color' => 'success']);
+        return redirect('/projects/detail/'.$prequestion->project->code)->with(['msg' => 'Preliminary Question Updated!','color' => 'success']);
     }
     public function deletePrequestion(Request $req)
     {
       $id = decrypt($req->token);
       $prequestion = Prequestion::find($id);
-      $project_id = $prequestion->project_id;
+      $project = $prequestion->project->code;
       $prequestion->delete();
-      return redirect('/projects/detail/'.encrypt($project_id))->with(['msg' => 'Preliminary Question Deleted!','color' => 'success']);
+      return redirect('/projects/detail/'.$project)->with(['msg' => 'Preliminary Question Deleted!','color' => 'success']);
     }
+
+    //ANSWERS
+    public function v_addAnswer($prequestion_id)
+    {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        $did = decrypt($prequestion_id);
+        $data = Prequestion::find($did);
+        $cek = $data->prequestionUser()->where('user_id','=',Auth::id())->count();
+        if($cek > 0){
+            $answer = $data->prequestionUser()->where('user_id','=',Auth::id())->first();
+            return view("_student.prequestion.edit",["data" => $answer , "answer_id" => encrypt($answer->id)]);
+        }else{
+            return view("_student.prequestion.add",["data" => $data , "prequestion_id" => $prequestion_id]);
+        }
+    }
+
     public function insertPrequestionUser(Request $req)
     {
         $req->validate([
             'answer' => 'required|max:191',
-            'prequestion_id' => 'required|exists:pro_prequestion,id',
-            'user_id' => 'required|exists:users,id',
         ]);
         $prequestionU = new PrequestionUser();
         $prequestionU->answer = $req->answer;
-        $prequestionU->prequestion_id = $req->prequestion_id;
-        $prequestionU->user_id = $req->user_id;
+        $prequestionU->prequestion_id = decrypt($req->token);
+        $prequestionU->user_id = Auth::id();
         $prequestionU->save();
-        return redirect('/prequestions/')->with(['msg' => 'Preliminary Answer Added!','color' => 'success']);
+        $code = $prequestionU->prequestion->project->code;
+        return redirect('projects/detail/'.$code)->with(['msg' => 'Preliminary Answer Added!','color' => 'success']);
     }
     public function updatePrequestionUser(Request $req)
     {
@@ -109,13 +129,7 @@ class PrequestionController extends Controller
         $prequestionU = PrequestionUser::find($id);
         $prequestionU->answer = $req->answer;
         $prequestionU->save();
-        return redirect('/prequestions/')->with(['msg' => 'Preliminary Answer Updated!','color' => 'success']);
-    }
-    public function deletePrequestionUser(Request $req)
-    {
-      $id = decrypt($req->token);
-      $prequestionU = PrequestionUser::find($id);
-      $prequestionU->delete();
-      return redirect('/prequestions/')->with(['msg' => 'Preliminary Answer Deleted!','color' => 'success']);
+        $code = $prequestionU->prequestion->project->code;
+        return redirect('projects/detail/'.$code)->with(['msg' => 'Preliminary Answer Updated!','color' => 'success']);
     }
 }

@@ -27,12 +27,12 @@
                             <div class="form-header default-color">
                                 <h3><i class="fas fa-lock"></i> Login: </h3>
                             </div>
-                            <div class="md-form">
+                            <div class="md-form md-outline">
                                 <i class="fas fa-envelope prefix grey-text"></i>
                                 <input type="text" id="defaultForm-email" class="form-control" name="email" value="admin@sipejek.com">
                                 <label for="defaultForm-email">email</label>
                             </div>
-                            <div class="md-form">
+                            <div class="md-form md-outline">
                                 <i class="fas fa-lock prefix grey-text"></i>
                                 <input type="password" id="defaultForm-pass" class="form-control" name="password" value="password">
                                 <label for="defaultForm-pass">password</label>
