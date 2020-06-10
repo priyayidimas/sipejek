@@ -16,10 +16,13 @@ class UserController extends Controller
    public function index()
    {
       if(!Auth::check()){
-         return view('welcome');
+         return view('home');
       }else{
          return redirect('/dashboard');
       }
+   }
+   public function home(){
+     return view('home');
    }
    public function v_register()
    {
@@ -27,7 +30,7 @@ class UserController extends Controller
    }
    public function dashboard(){
       if (!Auth::check()) {
-         return redirect('/');
+         return view('welcome');
       }
       $auth = User::find(Auth::id());
       return view("dashboard", compact('auth'));
@@ -195,7 +198,7 @@ class UserController extends Controller
          $user->desc = nl2br($escape);
       }
       $user->save();
-      
+
       if($req->project == ''){
          return redirect('/users/')->with(['msg' => 'User Updated!','color' => 'success']);
       }else{
@@ -237,7 +240,7 @@ class UserController extends Controller
       }
       if ($req->has('image')) {
          $code = rand(0,1000);
- 
+
          $file = $req->file('image')->storeAs(
             '/',
             $code.'_'.$req->file('image')->getClientOriginalName(),

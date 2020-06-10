@@ -13,6 +13,7 @@
 
 Route::get('/', 'UserController@index');
 Route::get('register', 'UserController@v_register');
+Route::get('home', 'UserController@home');
 
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
@@ -178,7 +179,7 @@ Route::post('file', 'UserController@file');
 
 //Notify Route
 Route::get('/notify', function () {
-   
+
     //Create Notif
     $project = \App\model\Project::find(1);
     $projectUser = $project->projectuser;
