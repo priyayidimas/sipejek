@@ -15,6 +15,7 @@ Route::get('/', 'UserController@index');
 Route::get('register', 'UserController@v_register');
 Route::get('home', 'UserController@home');
 
+Route::get('login', 'UserController@v_login');
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 Route::get('logout', 'UserController@logout');
@@ -28,6 +29,8 @@ Route::get('myProfile', 'UserController@myProfile');
 Route::get('showNotification', 'UserController@showNotification');
 //USERS
 Route::get('users', 'UserController@view');
+Route::get('messages', 'UserController@messages');
+
 Route::get('users/verify/{id}', 'UserController@verify');
 Route::get('users/edit/{id}', 'UserController@editbyid');
 Route::get('users/edit/{id}/{project_id}', 'UserController@editbyid');
@@ -39,6 +42,11 @@ Route::get('users/detail/{id}', 'UserController@detail');
 Route::post('users/add', 'UserController@insertUser');
 Route::post('users/edit', 'UserController@updateUser');
 Route::post('users/delete', 'UserController@deleteUser');
+
+Route::post('coteachProject', 'UserController@coteachProject');
+Route::post('enrollProject', 'UserController@enrollProject');
+Route::post('submitMessage', 'UserController@submitMessage');
+
 
 //PROJECT
 Route::get('projects', 'ProjectController@index');

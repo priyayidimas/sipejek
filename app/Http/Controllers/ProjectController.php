@@ -98,9 +98,9 @@ class ProjectController extends Controller
             $prou->user_id = Auth::id();
             $prou->save(); 
 
-            return redirect('/projects/')->with(['msg' => 'Project Added!','color' => 'success']);
+            return redirect('/dashboard')->with(['msg' => 'Project Added!','color' => 'success']);
         }else{
-            return redirect('/projects/')->with(['msg' => 'Duplicate Project','color' => 'error']);
+            return redirect('/dashboard')->with(['msg' => 'Duplicate Project','color' => 'error']);
         }
     }
     public function updateProject(Request $req)
@@ -121,14 +121,14 @@ class ProjectController extends Controller
             $project->desc = nl2br($escape);
         }
         $project->save();
-        return redirect('/projects/')->with(['msg' => 'Project Updated!','color' => 'success']);
+        return redirect('/dashboard/')->with(['msg' => 'Project Updated!','color' => 'success']);
     }
     public function deleteProject(Request $req)
     {
       $id = decrypt($req->token);
       $project = Project::find($id);
       $project->delete();
-      return redirect('/projects/')->with(['msg' => 'Project Deleted!','color' => 'success']);
+      return redirect('/dashboard/')->with(['msg' => 'Project Deleted!','color' => 'success']);
     }
     
     //Phase

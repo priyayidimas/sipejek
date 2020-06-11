@@ -11,8 +11,80 @@ html, body{
   background: #f0f0f0;
 }
 
+
+.theme {
+  background-color: #48d1cc;
+  color: #fff;
+}
+
 /* Toast */
 .md-toast-close-button:hover,
 .md-toast-close-button:focus {
   color: #000 !important; }
+
+/* Admin Card */
+.cascading-admin-card {
+  margin-top: 1.25rem
+}
+.cascading-admin-card .admin-up {
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: -1.25rem
+}
+
+.cascading-admin-card .admin-up {
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: -1.25rem
+}
+
+.cascading-admin-card .admin-up .fab,
+.cascading-admin-card .admin-up .far,
+.cascading-admin-card .admin-up .fas {
+  padding: 1.7rem;
+  font-size: 2rem;
+  color: #fff;
+  text-align: left;
+  -webkit-border-radius: 3px;
+  border-radius: 3px
+}
+
+.cascading-admin-card .admin-up .data {
+  float: right;
+  margin-top: 2rem;
+  text-align: right
+}
+
+.cascading-admin-card .admin-up .data p {
+  color: #999;
+  font-size: 12px
+}
+
+.classic-admin-card .card-body {
+  color: #fff;
+  margin-bottom: 0;
+  padding: .9rem
+}
+
+.classic-admin-card .card-body p {
+  font-size: 13px;
+  opacity: .7;
+  margin-bottom: 0
+}
+
+.classic-admin-card .card-body h4 {
+  margin-top: 10px
+}
+
+.classic-admin-card .card-body .float-right .fab,
+.classic-admin-card .card-body .float-right .far,
+.classic-admin-card .card-body .float-right .fas {
+  font-size: 3rem;
+  opacity: .5
+}
+
+.classic-admin-card .progress {
+  margin: 0;
+  opacity: .7
+}
 

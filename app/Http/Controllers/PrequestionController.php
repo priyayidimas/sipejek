@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\model\Prequestion;
 use App\model\PrequestionUser;
 use Illuminate\Support\Facades\Auth;
-
+use App\model\Project;
 class PrequestionController extends Controller
 {
     //MAIN PREQUESTION
@@ -15,7 +15,8 @@ class PrequestionController extends Controller
         if (!Auth::check()) {
             return redirect('/');
         }
-        return view("_teacher.prequestion.add",["project_id" => $project_id]);
+        $project = Project::find(decrypt($project_id));
+        return view("_teacher.prequestion.add",["project" => $project,"project_id" => $project_id]);
     }
     public function edit($id) {
         if (!Auth::check()) {
@@ -45,7 +46,8 @@ class PrequestionController extends Controller
         if (!Auth::check()) {
             return redirect('/');
         }
-        return view("_teacher.prequestion.closeforum",["project_id" => $project_id]);
+        $project = Project::find(decrypt($project_id));
+        return view("_teacher.prequestion.closeforum",["project" => $project, "project_id" => $project_id]);
     }
     
     //POST

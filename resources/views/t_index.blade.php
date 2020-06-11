@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>SIPEJEK &middot; @yield('title')</title>
-    <link rel="shortcut icon" href="{{{ asset('/assets/img/Capture.png') }}}">
+    <link rel="shortcut icon" href="{{{ asset('/assets/img/monitor.svg') }}}" type="image/svg+xml">
+    <link rel="icon" href="{{{ asset('/assets/img/monitor.svg') }}}">
     <link href="{{url('/assets/fontawesome/css/all.css')}}" rel="stylesheet">
     <link href="{{url('/assets/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url('/assets/css/mdb.min.4810.css')}}" rel="stylesheet">

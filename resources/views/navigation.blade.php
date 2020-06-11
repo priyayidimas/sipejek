@@ -15,6 +15,7 @@
           @if ($auth->id == 1)
           <li><a class="collapsible-header waves-effect" href="{{url('projects')}}"><i class="fas fa-code"></i> Projects </a></li>
           <li><a class="collapsible-header waves-effect" href="{{url('users')}}"><i class="fas fa-user "></i> Users </a></li>
+          <li><a class="collapsible-header waves-effect" href="{{url('messages')}}"><i class="fas fa-envelope "></i> Messages </a></li>
           @endif
           @if ($auth->projectUser->count() > 0)
           <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-code"></i> Projects <i class="fas fa-angle-down rotate-icon"></i></a>
@@ -41,7 +42,10 @@
     </div>
 
     <div class="breadcrumb-dn mr-auto">
-      <p><a href="{{url('')}}">Sistem Pengelola Projek</a></p>
+      <a class="navbar-brand" href="{{url('')}}">
+        <img src="{{url('/assets/img/monitor.svg')}}" height="30" alt="mdb logo" class="ml-3">
+        <span class="h4 ml-2">SIPEJEK</span>
+      </a>
     </div>
 
     <ul class="nav navbar-nav nav-flex-icons ml-auto">

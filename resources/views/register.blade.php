@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DPM SAEP &middot; Register</title>
-    <link rel="shortcut icon" href="{{{ asset('/assets/img/icon.png') }}}">
+    <title>SIPEJEK &middot; Register</title>
+    <link rel="shortcut icon" href="{{{ asset('/assets/img/monitor.svg') }}}">
+    <link rel="icon" href="{{{ asset('/assets/img/monitor.svg') }}}">
     <link href="{{url('/assets/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url('/assets/fontawesome/css/all.min.css')}}" rel="stylesheet">
     <link href="{{url('/assets/css/mdb.min.css')}}" rel="stylesheet">
@@ -20,7 +21,7 @@
                     @csrf
                     <div class="card">
                         <div class="card-body">
-                            <div class="form-header default-color">
+                            <div class="form-header theme">
                                 <h3><i class="fas fa-user"></i> Register:</h3>
                             </div>
                             <div class="md-form md-outline">
@@ -49,7 +50,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="options">
-                                <a href="{{url('/')}}">Back To Login</a>
+                                <a href="{{url('/login')}}">Back To Login</a>
                             </div>
                         </div>
                     </div>

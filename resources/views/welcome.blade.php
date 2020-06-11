@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>SIPEJEK &middot; Login</title>
-    <link rel="shortcut icon" href="{{{ asset('/assets/img/Capture.png') }}}">
+    <link rel="shortcut icon" href="{{{ asset('/assets/img/monitor.svg') }}}">
+    <link rel="icon" href="{{{ asset('/assets/img/monitor.svg') }}}">
     <link href="{{url('/assets/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url('/assets/fontawesome/css/all.min.css')}}" rel="stylesheet">
     <link href="{{url('/assets/css/mdb.min.css')}}" rel="stylesheet">
@@ -17,14 +18,16 @@
             <div class="col-lg-3"></div>
             <div class="col">
                 <div class="text-center mb-5">
-                    <img src="{{url('/assets/img/Capture.png')}}" width="150" height="150" class="mb-2 img-fluid rounded-circle z-depth-1-half" alt="">
+                    <a href="{{url('')}}">
+                        <img src="{{url('/assets/img/monitor.svg')}}" width="150" height="150" class="mb-2 img-fluid rounded-circle z-depth-1-half" alt="">
+                    </a>
                     <h4 class="display">Sistem Pengelola Projek</h4>
                 </div>
                 <form action="{{url('login')}}" method="post">
                     @csrf
                     <div class="card">
                         <div class="card-body">
-                            <div class="form-header default-color">
+                            <div class="form-header theme">
                                 <h3><i class="fas fa-lock"></i> Login: </h3>
                             </div>
                             <div class="md-form md-outline">

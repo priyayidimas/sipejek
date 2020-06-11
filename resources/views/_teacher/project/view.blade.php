@@ -11,7 +11,7 @@
         <div class="col-md-12">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="{{url('/')}}">Dashboard</a></li>
+                  <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
                   <li class="breadcrumb-item active">Projects</li>
                 </ol>
             </nav>
@@ -28,7 +28,6 @@
                                 <th class="th-sm">Code</th>
                                 <th class="th-sm">Title</th>
                                 <th class="th-sm">Status</th>
-                                <th class="th-sm">Desc</th>
                                 <th class="th-sm">Action</th>
                             </tr>
                         </thead>
@@ -39,7 +38,6 @@
                                 <td>{{$d->code}}</td>
                                 <td><a class="blue-text" href="{{url('/projects/detail/'.$d->code)}}">{{$d->topic." : ".$d->title}}</a></td>
                                 <td>{!! ($d->hasPreOk == 1) ? '<span class="badge badge-success">Started</span>' : '<span class="badge badge-danger">Not Started</span>' !!}</td>
-                                <td style="white-space:pre">{{$d->desc}}</td>
                                 <td><a href="#theModal" class="text-warning" data-toggle="modal" data-action="edit" data-token="{{encrypt($d->id)}}"><i class="fas fa-pencil"></i></a>&nbsp;&nbsp;&nbsp;<a href="#theModal" class="text-danger" data-toggle="modal" data-action="delete" data-token="{{encrypt($d->id)}}"><i class="fas fa-trash"></i></a></td>
                             </tr>
                             @endforeach

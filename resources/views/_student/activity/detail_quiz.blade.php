@@ -22,7 +22,7 @@
         <div class="col-md-12">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="{{url('/')}}">Dashboard</a></li>
+                  <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
                   <li class="breadcrumb-item"><a href="{{url('/projects/detail/'.$project->code)}}">{{$project->code}} - {{$project->title}}</a></li>
                   <li class="breadcrumb-item active">{{$data->title}}</li>
                 </ol>

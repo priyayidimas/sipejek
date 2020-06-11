@@ -9,17 +9,16 @@ use App\model\User;
 use App\model\Project;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-
+use App\model\Message;
+use App\model\ProjectUser;
+use App\Notifications\ProjectNotification;
 class UserController extends Controller
 {
    //GET
    public function index()
    {
-      if(!Auth::check()){
-         return view('home');
-      }else{
-         return redirect('/dashboard');
-      }
+      return view('home');
+
    }
    public function home(){
      return view('home');
@@ -28,12 +27,23 @@ class UserController extends Controller
    {
       return view('register');
    }
+   public function v_login(){
+      return view("welcome");
+   }
    public function dashboard(){
       if (!Auth::check()) {
-         return view('welcome');
+         return view('/');
+      }elseif (Auth::user()->type > 2) {
+         $auth = User::find(Auth::id());
+         $cProject = Project::count();
+         $cTeacher = User::where('type','=',2)->count();
+         $cStudent = User::where('type','=',1)->count();
+         $cMessage = Message::count();
+         return view("dashboard", compact('auth','cProject','cTeacher','cStudent','cMessage'));
+      }else{
+         $auth = User::find(Auth::id());
+         return view("dashboard", compact('auth'));
       }
-      $auth = User::find(Auth::id());
-      return view("dashboard", compact('auth'));
    }
    public function logout()
    {
@@ -46,6 +56,13 @@ class UserController extends Controller
       }
       $data = User::where('type','=',2)->orderBy('created_at','desc')->get();
       return view("user.view",["data" => $data]);
+   }
+   public function messages() {
+      if (!Auth::check()) {
+         return redirect('/');
+      }
+      $data = Message::get();
+      return view("user.message",["data" => $data]);
    }
    public function verify($id) {
       if (!Auth::check()) {
@@ -134,7 +151,7 @@ class UserController extends Controller
          $user->password = bcrypt($request->password);
          $user->save();
 
-         return redirect('/')->with(['color' => 'success', 'msg' => 'Register Berhasil, Konfirmasi Emailmu dan Tunggu Approve dari Ketua']);
+         return redirect('/login')->with(['color' => 'success', 'msg' => 'Register Success, Wait For Admin Approval']);
 
       }
    }
@@ -259,6 +276,92 @@ class UserController extends Controller
       $user->save();
       return back()->with(['msg' => 'Profile Updated!','color' => 'success']);
    }
+
+   public function coteachProject(Request $req)
+   {
+      $req->validate([
+         'code' => 'required|exists:project,code',
+      ]);
+      $project = Project::where('code','=',$req->code)->first();
+      $prou = new ProjectUser();
+      $prou->user_id = Auth::id();
+      $prou->project_id = $project->id;
+      $prou->save();
+
+      $sender = Auth::user();
+      $projectUser = $project->projectuser;
+      foreach($projectUser as $prou){
+          $user = $prou->user;
+          if($user->type > 1){
+              $details = [
+                  'code' => $project->code,
+                  'header' => "New Teacher",
+                  'body' => $sender->fullname.' Joined to Co-Teach A Project!',
+                  'link' => url('/projects/detail/'.$project->code)
+              ];
+              $user->notify(new ProjectNotification($details));
+          }
+      }
+      return redirect('/dashboard')->with(['msg' => 'Successfully Joined to Co Teach Project!','color' => 'success']);
+   }
+
+   public function enrollProject(Request $req)
+   {
+      $req->validate([
+         'code' => 'required|exists:project,code',
+      ]);
+      $project = Project::where('code','=',$req->code)->first();
+      $prou = new ProjectUser();
+      $prou->user_id = Auth::id();
+      $prou->project_id = $project->id;
+      $prou->save();
+
+      $sender = Auth::user();
+      $projectUser = $project->projectuser;
+      foreach($projectUser as $prou){
+          $user = $prou->user;
+          if($user->type > 1){
+              $details = [
+                  'code' => $project->code,
+                  'header' => "New Student",
+                  'body' => $sender->fullname.' Joined A Project!',
+                  'link' => url('/projects/detail/'.$project->code)
+              ];
+              $user->notify(new ProjectNotification($details));
+          }
+      }
+      return redirect('/dashboard')->with(['msg' => 'Successfully Enrolled To A Project!','color' => 'success']);
+   }
+   public function submitMessage(Request $req)
+   {
+      $req->validate([
+         'email' => 'required|email',
+         'name' => 'required',
+         'subject' => 'required',
+         'message' => 'required',
+      ]);
+      $message = new Message();
+      $message->name = $req->name;
+      $message->email = $req->email;
+      $message->subject = $req->subject;
+      $message->message = $req->message;
+      $message->save();
+      
+      $user = User::find(1);
+      $details = [
+         'code' => "ADMIN",
+         'header' => "New Message",
+         'body' => 'You Have New Message!',
+         'link' => url('/messages/')
+      ];
+      $user->notify(new ProjectNotification($details));
+      return redirect('/')->with(['msg' => 'Message Sent!','color' => 'success']);
+   }
+
+
+
+
+   //DEBUG
    public function file(Request $req)
    {
       // echo $req->check;

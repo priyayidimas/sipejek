@@ -14,7 +14,7 @@ class Controller extends BaseController
     public static function slugger($string,$replace){
         $char = ['\\','/',':',';','?','*','&','<','>','#','$',' ','|','+','\'','\"'];
         $normalize = str_replace($char,$replace,$string);
-        return strtolower($normalize);
+        return strtoupper($normalize);
     }
     public static function randomString($length = 6)
     {

@@ -23,17 +23,71 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Dashboard - {{($auth->type == 1) ? "Student" : "Teacher"}}</h4>
+                                    <h4 class="card-title">Dashboard - {{($auth->type == 1) ? "Student" : (($auth->type == 2) ? "Teacher" : "Admin")}}</h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row mb-5">
                         <div class="col-md-12">
+                            @if ($auth->type > 2)
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="card classic-admin-card unique-color-dark mt-3">
+                                        <div class="card-body">
+                                            <div class="pull-right">
+                                            <i class="fas fa-book mb-2" style="font-size:40px"></i>
+                                            </div>
+                                            <h5>STUDENTS</h5>
+                                            <h1 class="display float-right mr-3">{{$cStudent}}</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card classic-admin-card unique-color mt-3">
+                                        <div class="card-body">
+                                            <div class="pull-right">
+                                            <i class="fas fa-chalkboard-teacher mb-2" style="font-size:40px"></i>
+                                            </div>
+                                            <h5>TEACHERS</h5>
+                                            <h1 class="display float-right mr-3">{{$cTeacher}}</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="card classic-admin-card unique-color mt-3">
+                                        <div class="card-body">
+                                            <div class="pull-right">
+                                            <i class="fas fa-table mb-2" style="font-size:40px"></i>
+                                            </div>
+                                            <h5>PROJECTS</h5>
+                                            <h1 class="display float-right mr-3">{{$cProject}}</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card classic-admin-card unique-color-dark mt-3">
+                                        <div class="card-body">
+                                            <div class="pull-right">
+                                            <i class="fas fa-envelope mb-2" style="font-size:40px"></i>
+                                            </div>
+                                            <h5>MESSAGES</h5>
+                                            <h1 class="display float-right mr-3">{{$cMessage}}</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @else
                             <div class="card">
                                 <div class="card-body">
                                     @if ($auth->type == 2)
-                                    <a href="#addModal" class="btn btn-md btn-info" data-toggle="modal"><i class="fas fa-plus"></i> Add new project</a><br>
+                                    <a href="#addModal" class="btn btn-md btn-info" data-toggle="modal"><i class="fas fa-plus"></i> Add new project</a>
+                                    <a href="#coteachModal" class="btn btn-md btn-success" data-toggle="modal"><i class="fas fa-chalkboard-teacher"></i> Co-teach</a><br>
+                                    @endif
+                                    @if ($auth->type == 1)
+                                    <a href="#enrollModal" class="btn btn-md btn-success" data-toggle="modal"><i class="fas fa-chalkboard-teacher"></i> Join A Project</a><br>
                                     @endif
                                     <table id="dtTable" class="table table-striped" cellspacing="0" width="100%">
                                         <thead>
@@ -59,6 +113,7 @@
                                     </table>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
     
@@ -139,6 +194,64 @@
 
                 <div class="modal-body">
                     
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="enrollModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-success" role="document">
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p id="modalTitle" class="heading lead">Enroll to Project</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form class="" action="{{URL::to('/enrollProject')}}" method="post">
+                        {!! csrf_field() !!}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="md-form">
+                                    <input type="text" id="target" class="form-control" name="code" required">
+                                    <label for="materialLoginFormEmail" class="active">Code</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn green white-text waves-effect waves-light">Submit</button>
+                        <button type="button" class="btn btn-flat waves-effect" data-dismiss="modal">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="coteachModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-success" role="document">
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p id="modalTitle" class="heading lead">Co-teach A Project</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form class="" action="{{URL::to('/coteachProject')}}" method="post">
+                        {!! csrf_field() !!}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="md-form">
+                                    <input type="text" id="target" class="form-control" name="code" required">
+                                    <label for="materialLoginFormEmail" class="active">Code</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn green white-text waves-effect waves-light">Submit</button>
+                        <button type="button" class="btn btn-flat waves-effect" data-dismiss="modal">Cancel</button>
+                    </form>
                 </div>
             </div>
         </div>
