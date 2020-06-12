@@ -54,14 +54,26 @@
                                 <th class="th-sm">No</th>
                                 <th class="th-sm">Question</th>
                                 <th class="th-sm">Desc</th>
+                                <th class="th-sm">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data->prequestions as $p)
+                            @php
+                                $exist = $p->prequestionUser->where('user_id','=',Auth::id())->count();
+                                if($data->hasPreOk == 1){
+                                    $badge = '<span class="badge badge-info">Forum Closed</span>';
+                                }elseif ($exist > 0) {
+                                    $badge = '<span class="badge badge-success">Submitted</span>';
+                                }else{
+                                    $badge = '<span class="badge badge-danger">Not Submitted</span>';
+                                }
+                            @endphp
                             <tr>
                                 <td>{{$n++}}</td>
                                 <td><a href="#answerModal" class="text-info" data-toggle="modal" data-token="{{encrypt($p->id)}}">{{$p->question}}</a></td>
                                 <td style="white-space:pre">{!! $p->desc !!}</td>
+                                <td>{!! $badge !!}</td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -59,6 +59,21 @@ class QuizController extends Controller
         }
         return redirect('/projects/detail/'.$project->code)->with(['msg' => 'New Quiz Added!','color' => 'success']);
     }
+    public function v_confirmQuiz($activity_id)
+    {
+        if (!Auth::check()) {
+            return redirect('/');
+        }
+        return view("_teacher.activity.question.confirm",["eid" => $activity_id]);
+    }
+
+    public function confirmQuiz(Request $req)
+    {
+        $did = decrypt($req->token);
+        $activity = Activity::find($did);
+        $activity->questions()->update(['isConfirmed' => 1]);
+        return redirect('/activity/detail/'.$activity->slug)->with(['msg' => 'Quiz Confirmed and Published!','color' => 'success']);
+    }
 
     //QUESTIONS
     public function v_addQuestion($activity_id) {

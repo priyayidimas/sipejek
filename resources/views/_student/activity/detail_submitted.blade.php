@@ -67,6 +67,7 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <p>Submitted At : <b>{{Carbon::parse($submission->updated_at)->format('M d, Y @ H:i')}}</b></p>
                                             @if ($submission->attachment != null)
                                             <p>Attachment : <a href="{{url(''.$submission->attachment)}}">{{$submission->filename}}</a></p>
                                             @endif

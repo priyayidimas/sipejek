@@ -96,6 +96,7 @@ class ProjectController extends Controller
             $prou = new ProjectUser();
             $prou->project_id = $project->id;
             $prou->user_id = Auth::id();
+            $prou->isOwner = 1;
             $prou->save(); 
 
             return redirect('/dashboard')->with(['msg' => 'Project Added!','color' => 'success']);

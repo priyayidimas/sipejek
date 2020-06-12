@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 12, 2020 at 05:06 AM
+-- Generation Time: Jun 12, 2020 at 01:00 PM
 -- Server version: 10.3.19-MariaDB-1
 -- PHP Version: 7.3.10-1+b1
 
@@ -43,7 +43,10 @@ CREATE TABLE `messages` (
 --
 
 INSERT INTO `messages` (`id`, `name`, `email`, `subject`, `message`, `created_at`, `updated_at`) VALUES
-(1, 'Dante', 'mendozadante@gmail.com', 'Jelek', 'Gamau tau jelek', '2020-06-11 05:06:01', '2020-06-11 05:06:01');
+(1, 'Dante', 'mendozadante@gmail.com', 'Jelek', 'Gamau tau jelek', '2020-06-11 05:06:01', '2020-06-11 05:06:01'),
+(2, 'Dante', 'group1_d055@sipejek.com', 'Bagus', 'Mantap\r\nUy', '2020-06-11 21:59:06', '2020-06-11 21:59:06'),
+(3, 'AA', 'group1_d055@sipejek.com', 'AA', 'AAA', '2020-06-11 21:59:25', '2020-06-11 21:59:25'),
+(4, 'D', 'priyayidimas@gmail.com', 'DD', 'DDD', '2020-06-11 21:59:31', '2020-06-11 21:59:31');
 
 -- --------------------------------------------------------
 
@@ -99,19 +102,22 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
+('0385e3f1-bbfa-4df6-afdb-285681504ed8', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"Late Assignment\",\"body\":\"Group 2 Has Turned In The Assignment Late\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/asd-179\"}', '2020-06-11 22:14:55', '2020-06-11 22:11:48', '2020-06-11 22:14:55'),
 ('07478c74-7037-4ad4-ac48-080e64ebe8b5', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"Assignment Reviewed\",\"body\":\"Your Submission Has Been Reviewed\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\"}', '2020-06-07 02:52:18', '2020-06-07 02:46:56', '2020-06-07 02:52:18'),
 ('07ec9dfc-e178-40a7-94e3-670ac2acadc0', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 141, '{\"code\":\"NET200\",\"header\":\"New Assignment\",\"body\":\"Hi, BZdfyU! Your Teacher Has Posted New Assignment In NET200 - Developing Simple Network\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/perkenalan-networking-666\"}', NULL, '2020-06-03 23:15:28', '2020-06-03 23:15:28'),
 ('0848e1e8-88d0-418e-a415-371578d6ea33', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Dimas Anom Priyayi ! Group 1 Has Posted New Comment In HTML : First Module\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-05 01:47:31', '2020-06-05 01:45:21', '2020-06-05 01:47:31'),
 ('09204cb0-9f1d-4487-920f-bf3a6216e231', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Dimas Anom Priyayi ! Group 1 Has Posted New Comment In HTML : First Module\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-05 01:47:31', '2020-06-05 01:47:24', '2020-06-05 01:47:31'),
 ('0a2c6935-24cf-4529-93ba-86bfa6c79646', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Dimas Anom Priyayi ! Group 1 Has Posted New Comment In HTML : First Module\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-05 00:03:49', '2020-06-05 00:03:38', '2020-06-05 00:03:49'),
 ('0c53522c-75a7-4a34-ae99-3fc4cf007593', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"New quiz\",\"body\":\"Hi, Group 1! Your Teacher Has Posted New Quiz In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/cek-346\"}', '2020-06-05 05:38:43', '2020-06-05 04:25:54', '2020-06-05 05:38:43'),
+('12114b4a-7481-40dc-97f1-3de70e6b864e', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"NET200\",\"header\":\"New Student\",\"body\":\"Group 1 Joined A Project!\",\"link\":\"http:\\/\\/localhost:8000\\/projects\\/detail\\/NET200\"}', '2020-06-11 22:10:10', '2020-06-11 22:02:50', '2020-06-11 22:10:10'),
 ('17dd9d54-aa87-42b2-9ada-29e284dfc0ba', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"New assignment\",\"body\":\"Hi, Group 1! Your Teacher Has Posted New assignment In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/coba-lagi-963\"}', '2020-06-05 01:41:52', '2020-06-05 00:46:24', '2020-06-05 01:41:52'),
 ('1b9d7914-fb06-4df2-8f89-f4eb1f909dbe', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"Late Assignment\",\"body\":\"Group 1 Has Turned In The Assignment Late\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/asd-179\"}', '2020-06-05 02:16:56', '2020-06-05 02:16:48', '2020-06-05 02:16:56'),
 ('1cd277b8-6d20-4b46-a578-fe189eb0fc77', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 142, '{\"code\":\"NET200\",\"header\":\"New Assignment\",\"body\":\"Hi, XcwHSd! Your Teacher Has Posted New Assignment In NET200 - Developing Simple Network\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/perkenalan-networking-666\"}', NULL, '2020-06-03 23:15:28', '2020-06-03 23:15:28'),
 ('1fc1cb7c-186e-485d-87eb-74e74b59df63', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 156, '{\"code\":\"d055\",\"header\":\"New assignment\",\"body\":\"Hi, QUgsMX! Your Teacher Has Posted New assignment In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\"}', '2020-06-06 23:08:38', '2020-06-05 00:06:22', '2020-06-06 23:08:38'),
+('24edda96-17bb-4ba9-a7c1-ec5738a7b399', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 159, '{\"code\":\"NET100\",\"header\":\"New Teacher\",\"body\":\"Dimas Anom Priyayi Joined to Co-Teach A Project!\",\"link\":\"http:\\/\\/localhost:8000\\/projects\\/detail\\/NET100\"}', NULL, '2020-06-11 22:09:21', '2020-06-11 22:09:21'),
 ('28ef0822-14a6-4d11-9e10-9bb0f907948d', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"New material\",\"body\":\"Hi, Group 1! Your Teacher Has Posted New material In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-04 23:42:29', '2020-06-04 23:41:21', '2020-06-04 23:42:29'),
 ('2b9e3964-b879-44bb-82a2-78247519d9cb', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 156, '{\"code\":\"d055\",\"header\":\"New quiz\",\"body\":\"Hi, QUgsMX! Your Teacher Has Posted New Quiz In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/cek-lagi-coba-983\"}', '2020-06-06 23:08:36', '2020-06-05 04:27:06', '2020-06-06 23:08:36'),
-('2f7eb1ed-306e-4a96-b8ef-b7c9fa73a0a1', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"NET200\",\"header\":\"New Teacher\",\"body\":\"Dimas Anom Priyayi Joined to Co-Teach A Project!\",\"link\":\"http:\\/\\/localhost:8000\\/projects\\/detail\\/NET200\"}', NULL, '2020-06-11 05:00:07', '2020-06-11 05:00:07'),
+('2f7eb1ed-306e-4a96-b8ef-b7c9fa73a0a1', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"NET200\",\"header\":\"New Teacher\",\"body\":\"Dimas Anom Priyayi Joined to Co-Teach A Project!\",\"link\":\"http:\\/\\/localhost:8000\\/projects\\/detail\\/NET200\"}', '2020-06-11 22:00:02', '2020-06-11 05:00:07', '2020-06-11 22:00:02'),
 ('2f9ecbb5-2615-453f-a51d-3b22dbce6a2d', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 156, '{\"code\":\"d055\",\"header\":\"New material\",\"body\":\"Hi, QUgsMX! Your Teacher Has Posted New material In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-06 23:08:38', '2020-06-04 23:41:21', '2020-06-06 23:08:38'),
 ('3a016609-a665-4db0-98f1-8dd37f593328', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Group 1 ! {\\\"id\\\":153,\\\"fullname\\\":\\\"Dimas Anom Priyayi\\\",\\\"email\\\":\\\"priyayidimas@gmail.com\\\",\\\"verified\\\":1,\\\"type\\\":2,\\\"password\\\":\\\"$2y$10$7MvFG31\\\\\\/CCifCMmMMdNFPeFKhBZJpcHbnGFY10EqqLEOv86Kn1FAq\\\",\\\"image\\\":\\\"\\\\\\/upload\\\\\\/profile\\\\\\/default.png\\\",\\\"desc\\\":null,\\\"remember_token\\\":null,\\\"created_at\\\":\\\"2020-06-05 02:39:54\\\",\\\"updated_at\\\":\\\"2020-06-05 03:07:41\\\"}->fullname Has Posted New Comment In {\\\"id\\\":6,\\\"title\\\":\\\"HTML : First Module\\\",\\\"slug\\\":\\\"html---first-module-50\\\",\\\"type\\\":\\\"material\\\",\\\"attachment\\\":\\\"\\\\\\/upload\\\\\\/projects\\\\\\/d055\\\\\\/material\\\\\\/454_1805885_DimasAnomPriyayi_UTSLopen.pdf\\\",\\\"maxgrade\\\":0,\\\"timer\\\":0,\\\"desc\\\":\\\"Hai, coba pelajari dulu apa itu HTML yak<br \\\\\\/>\\\\r\\\\nasd<br \\\\\\/>\\\\r\\\\nasd<br \\\\\\/>\\\\r\\\\nasd<br \\\\\\/>\\\\r\\\\nasd<br \\\\\\/>\\\\r\\\\nasdfdsfsfsdg<br \\\\\\/>\\\\r\\\\ndg<br \\\\\\/>\\\\r\\\\ndf<br \\\\\\/>\\\\r\\\\ngdfgdgfdfg\\\",\\\"phase_id\\\":4,\\\"created_at\\\":\\\"2020-06-05 06:41:20\\\",\\\"updated_at\\\":\\\"2020-06-05 06:50:07\\\",\\\"phase\\\":{\\\"id\\\":4,\\\"title\\\":\\\"Belajar HTML\\\",\\\"date_start\\\":\\\"2020-06-05 00:00:00\\\",\\\"date_due\\\":\\\"2020-06-12 23:59:00\\\",\\\"project_id\\\":4,\\\"desc\\\":\\\"w3schools\\\",\\\"created_at\\\":\\\"2020-06-05 06:39:05\\\",\\\"updated_at\\\":\\\"2020-06-05 06:39:05\\\",\\\"project\\\":{\\\"id\\\":4,\\\"code\\\":\\\"d055\\\",\\\"topic\\\":\\\"Ilkom\\\",\\\"title\\\":\\\"Membuat Website Sederhana\\\",\\\"desc\\\":\\\"Website adalah sebuah layanan biar ganteng\\\",\\\"hasPreOk\\\":1,\\\"created_at\\\":\\\"2020-06-05 03:18:01\\\",\\\"updated_at\\\":\\\"2020-06-05 06:37:48\\\",\\\"projectuser\\\":[{\\\"id\\\":13,\\\"user_id\\\":153,\\\"project_id\\\":4,\\\"created_at\\\":\\\"2020-06-05 03:18:01\\\",\\\"updated_at\\\":\\\"2020-06-05 03:18:01\\\",\\\"user\\\":{\\\"id\\\":153,\\\"fullname\\\":\\\"Dimas Anom Priyayi\\\",\\\"email\\\":\\\"priyayidimas@gmail.com\\\",\\\"verified\\\":1,\\\"type\\\":2,\\\"password\\\":\\\"$2y$10$7MvFG31\\\\\\/CCifCMmMMdNFPeFKhBZJpcHbnGFY10EqqLEOv86Kn1FAq\\\",\\\"image\\\":\\\"\\\\\\/upload\\\\\\/profile\\\\\\/default.png\\\",\\\"desc\\\":null,\\\"remember_token\\\":null,\\\"created_at\\\":\\\"2020-06-05 02:39:54\\\",\\\"updated_at\\\":\\\"2020-06-05 03:07:41\\\"}},{\\\"id\\\":15,\\\"user_id\\\":155,\\\"project_id\\\":4,\\\"created_at\\\":\\\"2020-06-05 03:54:44\\\",\\\"updated_at\\\":\\\"2020-06-05 03:54:44\\\",\\\"user\\\":{\\\"id\\\":155,\\\"fullname\\\":\\\"Group 1\\\",\\\"email\\\":\\\"group1_d055@sipejek.com\\\",\\\"verified\\\":1,\\\"type\\\":1,\\\"password\\\":\\\"$2y$10$K2VwT8mkGxaci6JXmtT4aeTX4XVyVAxmTlIsC4m5gf9s6frvQ6TrW\\\",\\\"image\\\":\\\"\\\\\\/upload\\\\\\/profile\\\\\\/default.png\\\",\\\"desc\\\":null,\\\"remember_token\\\":null,\\\"created_at\\\":\\\"2020-06-05 03:54:43\\\",\\\"updated_at\\\":\\\"2020-06-05 05:49:34\\\"}},{\\\"id\\\":16,\\\"user_id\\\":156,\\\"project_id\\\":4,\\\"created_at\\\":\\\"2020-06-05 03:55:41\\\",\\\"updated_at\\\":\\\"2020-06-05 03:55:41\\\"}]}}}->title\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-05 00:01:01', '2020-06-05 00:00:50', '2020-06-05 00:01:01'),
 ('3c9c29b6-458b-4e46-b1f2-00f64a74bb0d', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 156, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Group 2 ! Group 1 Has Posted New Comment In Membuat Halaman HTML Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\\/submission\"}', '2020-06-07 03:33:29', '2020-06-07 02:52:42', '2020-06-07 03:33:29'),
@@ -133,10 +139,14 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 ('89cd80b2-d022-403e-a6c8-88b333defff1', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"Late Assignment\",\"body\":\"Group 1 Has Turned In The Assignment Late\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/cek-lagi-coba-983\"}', '2020-06-05 05:41:04', '2020-06-05 05:40:58', '2020-06-05 05:41:04'),
 ('91251d15-d526-4260-80af-f5484c5ec57d', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Dimas Anom Priyayi ! Group 1 Has Posted New Comment In Membuat Halaman HTML Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\"}', '2020-06-07 03:36:32', '2020-06-07 02:52:42', '2020-06-07 03:36:32'),
 ('9579366d-a406-4e34-91d2-4d471c291fce', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 1, '{\"code\":\"ADMIN\",\"header\":\"New Message\",\"body\":\"You Have New Message!\",\"link\":\"http:\\/\\/localhost:8000\\/messages\"}', '2020-06-11 05:10:48', '2020-06-11 05:06:02', '2020-06-11 05:10:48'),
+('991b3442-996f-497f-bd3d-a61343dc8379', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 1, '{\"code\":\"ADMIN\",\"header\":\"New Message\",\"body\":\"You Have New Message!\",\"link\":\"http:\\/\\/localhost:8000\\/messages\"}', '2020-06-11 22:10:23', '2020-06-11 21:59:07', '2020-06-11 22:10:23'),
 ('9988a795-9f61-40a6-ba23-f0e8ef728437', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 1, '{\"code\":\"NET200\",\"header\":\"New Assignment\",\"body\":\"Hi, OZchiY! Your Teacher Has Posted New Assignment In NET200 - Developing Simple Network\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/perkenalan-networking-666\"}', '2020-06-03 23:30:38', '2020-06-03 23:15:28', '2020-06-03 23:30:38'),
+('a34cebd7-19a4-40da-93a6-39b6fcaafd61', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 1, '{\"code\":\"ADMIN\",\"header\":\"New Message\",\"body\":\"You Have New Message!\",\"link\":\"http:\\/\\/localhost:8000\\/messages\"}', '2020-06-11 22:10:23', '2020-06-11 21:59:31', '2020-06-11 22:10:23'),
 ('a34dc3d6-6129-4a9d-b222-804ed9288dc3', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 156, '{\"code\":\"d055\",\"header\":\"New assignment\",\"body\":\"Hi, QUgsMX! Your Teacher Has Posted New assignment In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/asd-179\"}', '2020-06-06 23:08:37', '2020-06-05 00:47:54', '2020-06-06 23:08:37'),
 ('a606258f-80c8-4af0-b394-7512626a9f3a', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 156, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, QUgsMX ! Dimas Anom Priyayi Has Posted New Comment In HTML : First Module\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-06 23:08:37', '2020-06-05 01:41:39', '2020-06-06 23:08:37'),
+('ae43886d-2f44-4446-876b-2a6b226a53f0', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 1, '{\"code\":\"ADMIN\",\"header\":\"New Message\",\"body\":\"You Have New Message!\",\"link\":\"http:\\/\\/localhost:8000\\/messages\"}', '2020-06-11 22:10:23', '2020-06-11 21:59:25', '2020-06-11 22:10:23'),
 ('ae6f1b8e-2b4a-4b37-a6d4-16489a1657ce', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Group 1 ! Dimas Anom Priyayi Has Posted New Comment In Membuat Halaman HTML Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\"}', '2020-06-05 01:41:52', '2020-06-05 01:40:48', '2020-06-05 01:41:52'),
+('ae91fd9c-2027-49d0-9816-a3498a312911', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"NET100\",\"header\":\"New Teacher\",\"body\":\"Dimas Anom Priyayi Joined to Co-Teach A Project!\",\"link\":\"http:\\/\\/localhost:8000\\/projects\\/detail\\/NET100\"}', '2020-06-11 22:10:10', '2020-06-11 22:09:21', '2020-06-11 22:10:10'),
 ('af87ccff-0a8b-4368-afbf-088fdf84fe2f', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 2, '{\"code\":\"NET200\",\"header\":\"New Assignment\",\"body\":\"Hi, Ujangs! Your Teacher Has Posted New Assignment In NET200 - Developing Simple Network\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/perkenalan-networking-666\"}', NULL, '2020-06-03 23:15:28', '2020-06-03 23:15:28'),
 ('b413278a-fed1-4632-b1b5-5f7f6cd241fd', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Dimas Anom Priyayi ! Group 1 Has Posted New Comment In HTML : First Module\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-05 01:41:18', '2020-06-05 01:41:07', '2020-06-05 01:41:18'),
 ('b74f424e-4975-4b89-852c-f79fd4575a04', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"Assignment Reviewed\",\"body\":\"Your Submission Has Been Reviewed\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\"}', '2020-06-07 02:52:17', '2020-06-07 02:51:13', '2020-06-07 02:52:17'),
@@ -144,6 +154,7 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 ('ca1b1366-d764-424d-aa26-56df4ad12fb7', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"New quiz\",\"body\":\"Hi, Group 1! Your Teacher Has Posted New Quiz In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/first-quiz--html-581\"}', '2020-06-05 03:25:20', '2020-06-05 02:58:19', '2020-06-05 03:25:20'),
 ('cbff181f-9ee7-49a2-b486-8b4cfb24e085', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 156, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, QUgsMX ! Group 1 Has Posted New Comment In Membuat Halaman HTML Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\"}', '2020-06-06 23:08:37', '2020-06-05 01:40:32', '2020-06-06 23:08:37'),
 ('ce95031b-4b92-49d6-a9a6-f60012ec3457', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 155, '{\"code\":\"d055\",\"header\":\"New assignment\",\"body\":\"Hi, Group 1! Your Teacher Has Posted New assignment In d055 - Membuat Website Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\"}', '2020-06-05 00:06:34', '2020-06-05 00:06:22', '2020-06-05 00:06:34'),
+('d35a836a-9ef5-420e-a4d1-0e60018298fe', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 2, '{\"code\":\"NET200\",\"header\":\"New Student\",\"body\":\"Group 1 Joined A Project!\",\"link\":\"http:\\/\\/localhost:8000\\/projects\\/detail\\/NET200\"}', NULL, '2020-06-11 22:02:50', '2020-06-11 22:02:50'),
 ('dcaed3cb-d63f-4b5d-be42-50f5c4c9d3b8', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 156, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, QUgsMX ! Group 1 Has Posted New Comment In HTML : First Module\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/html---first-module-50\"}', '2020-06-06 23:08:37', '2020-06-05 01:45:21', '2020-06-06 23:08:37'),
 ('e2a2c8f3-76ce-4439-969e-75feea5b8110', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 144, '{\"code\":\"NET200\",\"header\":\"New Assignment\",\"body\":\"Hi, CFRLZP! Your Teacher Has Posted New Assignment In NET200 - Developing Simple Network\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/perkenalan-networking-666\"}', NULL, '2020-06-03 23:15:28', '2020-06-03 23:15:28'),
 ('e4a50273-63a9-4543-9957-b5e8b3fe5d29', 'App\\Notifications\\ProjectNotification', 'App\\model\\User', 153, '{\"code\":\"d055\",\"header\":\"New Comment\",\"body\":\"Hi, Dimas Anom Priyayi ! Group 1 Has Posted New Comment In Membuat Halaman HTML Sederhana\",\"link\":\"http:\\/\\/localhost:8000\\/activity\\/detail\\/membuat-halaman-html-sederhana-4\"}', '2020-06-05 01:41:18', '2020-06-05 01:40:32', '2020-06-05 01:41:18'),
@@ -195,7 +206,9 @@ INSERT INTO `project` (`id`, `code`, `topic`, `title`, `desc`, `hasPreOk`, `crea
 (2, 'MAT200', 'Mathematics', 'Measuring Volume of Cyllinder', NULL, 0, NULL, NULL),
 (3, 'BIO100', 'Biology', 'Examining Anatomy of A Dead Frog', NULL, 0, NULL, '2020-03-08 00:29:26'),
 (4, 'd055', 'Ilkom', 'Membuat Website Sederhana', 'Website adalah sebuah layanan biar ganteng', 1, '2020-06-04 20:18:01', '2020-06-04 23:37:48'),
-(5, 'S010', 'Sejarah', 'Diorama', 'WW2 adalah world war 2', 1, '2020-06-11 03:21:53', '2020-06-11 03:26:15');
+(5, 'S010', 'Sejarah', 'Diorama', 'WW2 adalah world war 2', 1, '2020-06-11 03:21:53', '2020-06-11 03:26:15'),
+(6, 'NET100', 'Networking', 'Introduction To Networking', NULL, 0, '2020-06-11 22:07:07', '2020-06-11 22:07:07'),
+(7, 'NET300', 'Networking', 'Advanced Networking', NULL, 0, '2020-06-11 22:09:08', '2020-06-11 22:09:08');
 
 -- --------------------------------------------------------
 
@@ -207,6 +220,7 @@ CREATE TABLE `project_x_user` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL,
+  `isOwner` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=COMPACT;
@@ -215,18 +229,22 @@ CREATE TABLE `project_x_user` (
 -- Dumping data for table `project_x_user`
 --
 
-INSERT INTO `project_x_user` (`id`, `user_id`, `project_id`, `created_at`, `updated_at`) VALUES
-(1, 2, 1, NULL, NULL),
-(2, 2, 2, NULL, NULL),
-(13, 153, 4, '2020-06-04 20:18:01', '2020-06-04 20:18:01'),
-(15, 155, 4, '2020-06-04 20:54:44', '2020-06-04 20:54:44'),
-(16, 156, 4, '2020-06-04 20:55:41', '2020-06-04 20:55:41'),
-(17, 153, 5, '2020-06-11 03:21:53', '2020-06-11 03:21:53'),
-(18, 157, 5, '2020-06-11 03:22:54', '2020-06-11 03:22:54'),
-(19, 158, 5, '2020-06-11 03:22:55', '2020-06-11 03:22:55'),
-(20, 153, 2, '2020-06-11 04:57:10', '2020-06-11 04:57:10'),
-(21, 153, 3, '2020-06-11 04:58:03', '2020-06-11 04:58:03'),
-(22, 153, 1, '2020-06-11 05:00:06', '2020-06-11 05:00:06');
+INSERT INTO `project_x_user` (`id`, `user_id`, `project_id`, `isOwner`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 0, NULL, NULL),
+(2, 2, 2, 0, NULL, NULL),
+(13, 153, 4, 0, '2020-06-04 20:18:01', '2020-06-04 20:18:01'),
+(15, 155, 4, 0, '2020-06-04 20:54:44', '2020-06-04 20:54:44'),
+(16, 156, 4, 0, '2020-06-04 20:55:41', '2020-06-04 20:55:41'),
+(17, 153, 5, 0, '2020-06-11 03:21:53', '2020-06-11 03:21:53'),
+(18, 157, 5, 0, '2020-06-11 03:22:54', '2020-06-11 03:22:54'),
+(19, 158, 5, 0, '2020-06-11 03:22:55', '2020-06-11 03:22:55'),
+(20, 153, 2, 0, '2020-06-11 04:57:10', '2020-06-11 04:57:10'),
+(21, 153, 3, 0, '2020-06-11 04:58:03', '2020-06-11 04:58:03'),
+(22, 153, 1, 0, '2020-06-11 05:00:06', '2020-06-11 05:00:06'),
+(23, 155, 1, 0, '2020-06-11 22:02:50', '2020-06-11 22:02:50'),
+(24, 159, 6, 1, '2020-06-11 22:07:07', '2020-06-11 22:07:07'),
+(25, 159, 7, 1, '2020-06-11 22:09:08', '2020-06-11 22:09:08'),
+(26, 153, 6, 0, '2020-06-11 22:09:21', '2020-06-11 22:09:21');
 
 -- --------------------------------------------------------
 
@@ -291,7 +309,8 @@ CREATE TABLE `pro_act_assignment_x_user` (
 INSERT INTO `pro_act_assignment_x_user` (`id`, `desc`, `attachment`, `filename`, `score`, `review`, `user_id`, `activity_id`, `created_at`, `updated_at`) VALUES
 (1, 'Monggo Baca Pak', 'file.txt', NULL, NULL, '', 3, 2, NULL, NULL),
 (3, 'Ini Pak Punten', '/upload/projects/d055/assignment/membuat-halaman-html-sederhana-4/937_ERD RR.png', '937_ERD RR.png', 100, 'Yoi Baguzz', 155, 7, '2020-06-05 01:34:10', '2020-06-07 02:51:13'),
-(4, 'AAA', '/upload/projects/d055/assignment/asd-179/738_7071.jpg', '738_7071.jpg', 1, '', 155, 9, '2020-06-05 02:16:48', '2020-06-05 02:16:48');
+(4, 'AAA', '/upload/projects/d055/assignment/asd-179/738_7071.jpg', '738_7071.jpg', 1, '', 155, 9, '2020-06-05 02:16:48', '2020-06-05 02:16:48'),
+(5, 'Nih Pak', '/upload/projects/d055/assignment/asd-179/345_Profile.jpg', '345_Profile.jpg', NULL, '', 156, 9, '2020-06-11 22:11:47', '2020-06-11 22:11:47');
 
 -- --------------------------------------------------------
 
@@ -345,6 +364,7 @@ CREATE TABLE `pro_act_quiz_question` (
   `isMultiple` tinyint(1) NOT NULL DEFAULT 0,
   `maxscore` int(3) NOT NULL DEFAULT 0,
   `desc` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `isConfirmed` tinyint(1) NOT NULL DEFAULT 0,
   `activity_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -354,19 +374,19 @@ CREATE TABLE `pro_act_quiz_question` (
 -- Dumping data for table `pro_act_quiz_question`
 --
 
-INSERT INTO `pro_act_quiz_question` (`id`, `question`, `isMultiple`, `maxscore`, `desc`, `activity_id`, `created_at`, `updated_at`) VALUES
-(1, 'Apa itu routing?', 0, 0, '', 5, '2020-06-04 00:36:16', '2020-06-04 00:36:16'),
-(2, 'Jelaskan fungsi routing!', 0, 0, '', 5, '2020-06-04 00:36:16', '2020-06-04 00:36:16'),
-(3, 'Bagaimana cara kerja static routing?', 0, 0, '', 5, '2020-06-04 00:36:16', '2020-06-04 00:36:16'),
-(7, 'Dimana Letak Layer Routing?', 0, 0, '', 5, '2020-06-04 01:27:23', '2020-06-04 01:27:39'),
-(8, 'What is HTML?', 0, 34, '', 10, '2020-06-05 02:58:18', '2020-06-05 04:53:42'),
-(9, 'Who found HTML?', 0, 33, '', 10, '2020-06-05 02:58:18', '2020-06-05 04:53:49'),
-(10, 'What <p> Do?', 0, 33, '', 10, '2020-06-05 02:58:18', '2020-06-05 04:53:55'),
-(11, 'Apasi?', 0, 20, '', 11, '2020-06-05 04:25:54', '2020-06-05 04:25:54'),
-(12, 'Hmm?', 0, 30, '', 11, '2020-06-05 04:25:54', '2020-06-05 04:31:52'),
-(13, 'Apa kamu?', 0, 50, '', 12, '2020-06-05 04:27:06', '2020-06-05 04:27:06'),
-(14, 'Kenapa Sih?', 0, 50, '', 12, '2020-06-05 04:27:06', '2020-06-05 04:27:06'),
-(16, 'Kenapa Ai Kamu', 0, 25, '', 11, '2020-06-05 04:36:39', '2020-06-05 04:36:39');
+INSERT INTO `pro_act_quiz_question` (`id`, `question`, `isMultiple`, `maxscore`, `desc`, `isConfirmed`, `activity_id`, `created_at`, `updated_at`) VALUES
+(1, 'Apa itu routing?', 0, 0, '', 0, 5, '2020-06-04 00:36:16', '2020-06-04 00:36:16'),
+(2, 'Jelaskan fungsi routing!', 0, 0, '', 0, 5, '2020-06-04 00:36:16', '2020-06-04 00:36:16'),
+(3, 'Bagaimana cara kerja static routing?', 0, 0, '', 0, 5, '2020-06-04 00:36:16', '2020-06-04 00:36:16'),
+(7, 'Dimana Letak Layer Routing?', 0, 0, '', 0, 5, '2020-06-04 01:27:23', '2020-06-04 01:27:39'),
+(8, 'What is HTML?', 0, 34, '', 1, 10, '2020-06-05 02:58:18', '2020-06-11 22:51:01'),
+(9, 'Who found HTML?', 0, 33, '', 1, 10, '2020-06-05 02:58:18', '2020-06-11 22:51:01'),
+(10, 'What <p> Do?', 0, 33, '', 1, 10, '2020-06-05 02:58:18', '2020-06-11 22:51:01'),
+(11, 'Apasi?', 0, 20, '', 0, 11, '2020-06-05 04:25:54', '2020-06-05 04:25:54'),
+(12, 'Hmm?', 0, 30, '', 0, 11, '2020-06-05 04:25:54', '2020-06-05 04:31:52'),
+(13, 'Apa kamu?', 0, 50, '', 0, 12, '2020-06-05 04:27:06', '2020-06-05 04:27:06'),
+(14, 'Kenapa Sih?', 0, 50, '', 0, 12, '2020-06-05 04:27:06', '2020-06-05 04:27:06'),
+(16, 'Kenapa Ai Kamu', 0, 25, '', 0, 11, '2020-06-05 04:36:39', '2020-06-05 04:36:39');
 
 -- --------------------------------------------------------
 
@@ -643,7 +663,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -655,13 +675,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `project`
 --
 ALTER TABLE `project`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `project_x_user`
 --
 ALTER TABLE `project_x_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `pro_activity`
@@ -673,7 +693,7 @@ ALTER TABLE `pro_activity`
 -- AUTO_INCREMENT for table `pro_act_assignment_x_user`
 --
 ALTER TABLE `pro_act_assignment_x_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pro_act_comment`

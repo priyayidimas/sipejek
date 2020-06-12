@@ -106,7 +106,11 @@
                                                 <td>{{$d->project->code}}</td>
                                                 <td><a class="blue-text" href="{{url('/projects/detail/'.$d->project->code)}}">{{$d->project->topic." : ".$d->project->title}}</a></td>
                                                 <td>{!! ($d->project->hasPreOk == 1) ? '<span class="badge badge-success">Started</span>' : '<span class="badge badge-danger">Not Started</span>' !!}</td>
+                                                @if ($d->isOwner == 1)
                                                 <td class="act"><a href="#theModal" class="text-warning" data-toggle="modal" data-action="edit" data-token="{{encrypt($d->project->id)}}"><i class="fas fa-pencil"></i></a>&nbsp;&nbsp;&nbsp;<a href="#theModal" class="text-danger" data-toggle="modal" data-action="delete" data-token="{{encrypt($d->project->id)}}"><i class="fas fa-trash"></i></a></td>
+                                                @else
+                                                <td class="act"> - </td>
+                                                @endif
                                             </tr>
                                             @endforeach
                                         </tbody>

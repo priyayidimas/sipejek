@@ -121,6 +121,9 @@ Route::post('comment/delete', 'ActivityController@deleteComment');
 //Quiz
 Route::get('activity/add/quiz/{phase_id}', 'ActivityController@v_addQuiz');
 Route::post('activity/add/quiz/', 'QuizController@newQuiz');
+Route::get('confirmQuiz/{activity_id}', 'QuizController@v_confirmQuiz');
+Route::post('confirmQuiz', 'QuizController@confirmQuiz');
+
 
 //Question
 Route::get('question/add/{activity_id}', 'QuizController@v_addQuestion');

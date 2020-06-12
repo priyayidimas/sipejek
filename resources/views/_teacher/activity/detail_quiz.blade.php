@@ -115,11 +115,14 @@
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title"><b>Quiz Body</b> 
+                                @if ($data->questions->sum('isConfirmed') == 0)
                                 <button class="ml-5 btn btn-md btn-info dropdown-toggle mr-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px; margin: 5px"><i class="fas fa-plus"></i></button>
                                 <div class="dropdown-menu">
                                     {{-- <a class="dropdown-item" id="choiceBtn">Multi-choice</a> --}}
                                     <a class="dropdown-item" href="#addModal" data-toggle="modal" data-url="question" data-token="{{encrypt($data->id)}}">Essay</a>
                                 </div>
+                                <button class="ml-5 btn btn-md btn-success" type="button" style="padding: 10px; margin: 5px" data-toggle="modal" data-target="#successModal" data-url="confirmQuiz" data-token="{{encrypt($data->id)}}"><i class="fas fa-check"></i></button>
+                                @endif
                             </h5>
                             
         
@@ -139,6 +142,7 @@
 
                                 <div class="row">
                                     <div class="col-md-12" style="font-size: 14px">
+                                        @if ($question->isConfirmed == 0)
                                         <div class="ml-auto float-right">
                                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-ellipsis-v"></i></a>
                                             <div class="dropdown-menu">
@@ -146,7 +150,8 @@
                                                 <a class="dropdown-item" href="#deleteModal" data-toggle="modal" data-url="question" data-token="{{encrypt($question->id)}}">Delete</a>
                                             </div>
                                         </div>
-                                        <p>Question #{{$i++}}</p>
+                                        @endif
+                                        <p>Question #{{$i++}} {{($question->isConfirmed == 1) ? '(Confirmed)' : ''}}</p>
                                         <p class="text-muted">{{$question->question}}</p>
                                     </div>
                                 </div>
@@ -268,8 +273,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-notify modal-info" role="document">
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-success" role="document">
             <div class="modal-content">
                 <!--Header-->
                 <div class="modal-header">
@@ -280,7 +285,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <div class="row infoLoader">
+                    <div class="row forumLoader">
                         <div class="col-md-12" style="text-align: center">
                             <div class="preloader-wrapper active">
                                 <div class="spinner-layer spinner-blue-only ">
@@ -297,7 +302,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="infoContent"></div>
+                    <div class="forumContent"></div>
                 </div>
             </div>
         </div>
@@ -348,7 +353,7 @@ $(document).ready(function () {
         var id = link.data('token');
         var url = link.data('url');
         var user = link.data('user');
-        modal.find('#modalTitle').html('Confirm');
+        modal.find('#modalTitle').html('Review');
         setTimeout(function () { 
             modal.find('.forumLoader').css('display','none');
             modal.find('.forumContent').css('display','block');
